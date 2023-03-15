@@ -1,2 +1,2 @@
 make:
-	clang -std=c11 -Wall -Wextra -Werror -Wpedantic src/*.c inc/libmx/src/*.c -o uls
+	clang -std=c11 -Wall -Wextra -Werror -Wpedantic inc/libmx/src/*.c src/*.c -o uls
