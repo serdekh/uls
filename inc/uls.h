@@ -1,3 +1,18 @@
+#define _DEFAULT_SOURCE
+#include <dirent.h>
+
+#include <stdbool.h>
+
+#define CURRENT_DIRECTORY "."
+#define FLAG__HIDDEN_FILES_PRINTED "-a"
+
+typedef struct dirent t_dirent;
+
+
+
+int print_files_and_directories(bool hidden_are_printed);
+
+
 /* My knowledge of how these functions work */
 
 // write        (KNOW!)               - function that prints data into a descriptor
