@@ -110,5 +110,6 @@ void mx_pop_back(t_list **head);
 int mx_list_size(t_list *list);
 t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *));
 
+//uls
 void mx_printstrc(const char *s, const char c);
-
+bool mx_is_hidden_file(const char *file_name);
