@@ -1,27 +1,43 @@
 #define _DEFAULT_SOURCE
 #include <dirent.h>
 
+#include <errno.h>
 #include <stdbool.h>
+
+#include "../inc/libmx/inc/libmx.h"
 
 #define CURRENT_DIRECTORY "."
 #define FLAG__HIDDEN_FILES_PRINTED "-a"
 
 typedef struct dirent t_dirent;
 
+/**
+ * @brief reads current directory and prints files/directories to stdout
+ * @param hidden_are_printed if true, then hidden files will be printed
+ * @return nothing but if opening file fails, program stops working and returns 1 by exit() function
+*/
+void print_files_and_directories(bool hidden_are_printed);
 
+/**
+ * @brief calls opendir() function from dirent.h but also checks if opening dir was successful.
+ * If opening failed, then program stops working and returns 1. Otherwise, sets current directory
+ * to the dir pointer
+ * 
+ * @param dir pointer which will be set with a {name} directory
+ * @param name directory path which will be set to a {dir} struct
+ * @return nothing but if opening file fails, program stops working and returns 1 by exit() function
+*/
+void try_opendir(DIR **dir, const char *name);
 
-int print_files_and_directories(bool hidden_are_printed);
-
-
-/* My knowledge of how these functions work */
+/* Functions note */
 
 // write        (KNOW!)               - function that prints data into a descriptor
 // malloc       (KNOW!)               - function to allocate dynamic memory
 // free         (KNOW!)               - function to free dynamic memory;
 // exit         (KNOW!)               - kills the process of a program and returns 1 or 0
+// malloc_size  (KNOW!)               - returns size of an allocated memory
+// strerror     (KNOW!)               - prints error from 'errno' variable
 
-// malloc_size  (DON'T KNOW!)         - ?
-// strerror     (DON'T KNOW!)         - ?
 // opendir      (DON'T KNOW!)         - ?
 // readdir      (DON'T KNOW!)         - ?
 // closedir     (DON'T KNOW!)         - ?
