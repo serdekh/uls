@@ -12,11 +12,33 @@
 typedef struct dirent t_dirent;
 
 /**
- * @brief reads current directory and prints files/directories to stdout
- * @param hidden_are_printed if true, then hidden files will be printed
- * @return nothing but if opening file fails, program stops working and returns 1 by exit() function
+ * @brief sorts a list of dirent structures
+ * @param dirent_structures a list of dirent structures
+ * @return Nothing but sorts the input list
 */
-void print_files_and_directories(bool hidden_are_printed);
+void mx_sort_dirent_structures(t_list *dirent_structures);
+
+/**
+ * @brief frees all the memory in the list allocated by mx_get_dirent_structures() function
+ * @param dirent_structures_list list of dirent structures
+ * @return If pointer is NULL, function returns.
+*/
+void mx_free_dirent_structures(t_list *dirent_structures_list);
+
+/**
+ * @brief uses opendir and readdir funcs to get all files in a directory converted into dirent structures
+ * @param name directory path
+ * @return list of dirent structures with a dynamic memory. Requires freeing by mx_free_dirent_structures
+*/
+t_list *mx_get_dirent_structures(const char *name);
+
+/**
+ * @brief reads a `dirent_structures` list and prints d_name field of them in stdout
+ * @param dirent_structures dynamic list of dirent structs to be printed
+ * @param hidden_are_printed if true, then hidden files will be printed
+ * @return nothing. If file pointer is NULL, function returns
+*/
+void mx_print_files_and_directories(t_list *dirent_structures, bool hidden_are_printed);
 
 /**
  * @brief calls opendir() function from dirent.h but also checks if opening dir was successful.
@@ -27,7 +49,7 @@ void print_files_and_directories(bool hidden_are_printed);
  * @param name directory path which will be set to a {dir} struct
  * @return nothing but if opening file fails, program stops working and returns 1 by exit() function
 */
-void try_opendir(DIR **dir, const char *name);
+void mx_try_opendir(DIR **dir, const char *name);
 
 /* Functions note */
 
@@ -37,10 +59,10 @@ void try_opendir(DIR **dir, const char *name);
 // exit         (KNOW!)               - kills the process of a program and returns 1 or 0
 // malloc_size  (KNOW!)               - returns size of an allocated memory
 // strerror     (KNOW!)               - prints error from 'errno' variable
+// opendir      (KNOW!)               - opens a stream with a directory and returns a pointer to it
+// readdir      (KNOW!)               - returns a dirent struct that represents a file/dir in a current one
+// closedir     (KNOW!)               - closes the stream of an opendir function
 
-// opendir      (DON'T KNOW!)         - ?
-// readdir      (DON'T KNOW!)         - ?
-// closedir     (DON'T KNOW!)         - ?
 // stat         (DON'T KNOW!)         - ?
 // lstat        (DON'T KNOW!)         - ?
 // getpwuid     (DON'T KNOW!)         - ?
