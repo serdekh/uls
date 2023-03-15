@@ -1,0 +1,4 @@
+*.obj
+.vscode
+inc/libmx/obj
+inc/libmx/libmx.a
