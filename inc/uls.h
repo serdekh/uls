@@ -6,6 +6,7 @@
 
 #include "../inc/libmx/inc/libmx.h"
 
+#define FLAG_CHAR '-'
 #define CURRENT_DIRECTORY "."
 #define FLAG__HIDDEN_FILES_PRINTED "-a"
 #define FLAG__MORE_INFORMATATION_PRINTED "-l"

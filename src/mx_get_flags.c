@@ -6,7 +6,7 @@ t_list *mx_get_flags(int argc, char **argv) {
     t_list *flags = NULL;
 
     for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-') {
+        if (argv[i][0] == FLAG_CHAR) {
             char *str = mx_strnew(strlen(argv[i]));
             mx_strcpy(str, argv[i]);
             mx_push_back(&flags, str);
