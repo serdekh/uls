@@ -2,7 +2,7 @@
 
 t_list *mx_get_dirent_structures(const char *name) {
     if (!name) return NULL;
-    
+
     DIR *dir = NULL;
     t_list *entries = NULL;
     t_dirent *entry = NULL;
