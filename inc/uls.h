@@ -8,6 +8,7 @@
 
 #define CURRENT_DIRECTORY "."
 #define FLAG__HIDDEN_FILES_PRINTED "-a"
+#define FLAG__MORE_INFORMATATION_PRINTED "-l"
 
 typedef struct dirent t_dirent;
 
@@ -51,32 +52,21 @@ void mx_print_files_and_directories(t_list *dirent_structures, bool hidden_are_p
 */
 void mx_try_opendir(DIR **dir, const char *name);
 
-/* Functions note */
+/**
+ * @brief copies data from SRC to DEST
+ * @param dest dirent structure (should be dynamically allocated)
+ * @param src dirent structure with data that will be copied to dest
+ * @return nothing. If one of pointers are NULL, the function returns
+*/
+void mx_direntcpy(t_dirent *dest, t_dirent *src);
 
-// write        (KNOW!)               - function that prints data into a descriptor
-// malloc       (KNOW!)               - function to allocate dynamic memory
-// free         (KNOW!)               - function to free dynamic memory;
-// exit         (KNOW!)               - kills the process of a program and returns 1 or 0
-// malloc_size  (KNOW!)               - returns size of an allocated memory
-// strerror     (KNOW!)               - prints error from 'errno' variable
-// opendir      (KNOW!)               - opens a stream with a directory and returns a pointer to it
-// readdir      (KNOW!)               - returns a dirent struct that represents a file/dir in a current one
-// closedir     (KNOW!)               - closes the stream of an opendir function
 
-// stat         (DON'T KNOW!)         - ?
-// lstat        (DON'T KNOW!)         - ?
-// getpwuid     (DON'T KNOW!)         - ?
-// getgrgid     (DON'T KNOW!)         - ?
-// listxattr    (DON'T KNOW!)         - ?
-// getxattr     (DON'T KNOW!)         - ?
-// readlink     (DON'T KNOW!)         - ?
-// ioctl        (DON'T KNOW!)         - ?
-// issaty       (DON'T KNOW!)         - ?
-// acl_get_file (DON'T KNOW!)         - ?
-// acl_to_text  (DON'T KNOW!)         - ?
-// acl_free     (DON'T KNOW!)         - ?
+/* The actual uls functions thatt represent the cmd calls*/
 
-// perror       (NOT COMPLETELY KNOW) - function to print error in stderr. Maybe works with errno?
-// time         (NOT COMPLETELY KNOW) - function to calculate how long program works?
-// ctime        (NOT COMPLETELY KNOW) - function to calculate how long program works? 
-// errno        (NOT COMPLETELY KNOW) - saves error to a global variable?
+/**
+ * @brief calls 'uls' command without any parameters and prints files/dirs
+ * in the alphabet order from the current directory
+ * @return 0 if success or 1 if failed
+*/
+void mx_uls_no_params();
+
