@@ -60,8 +60,22 @@ void mx_try_opendir(DIR **dir, const char *name);
 */
 void mx_direntcpy(t_dirent *dest, t_dirent *src);
 
+/**
+ * @brief allocates memory for a list of flag strings
+ * @param argc size of the array of the `main` function input
+ * @param argv the array of the `main` function input
+ * @return dynamic list of strings of flags. Should be freed with the mx_free_flags() function
+*/
+t_list *mx_get_flags(int argc, char **argv);
 
-/* The actual uls functions thatt represent the cmd calls*/
+/**
+ * @brief frees all memory in the dynamic list
+ * @param flags the list to be freed
+ * @return nothing. If pointer is NULL, function returns
+*/
+void mx_free_flags(t_list *flags);
+
+/* The actual uls functions that represent the cmd calls*/
 
 /**
  * @brief calls 'uls' command without any parameters and prints files/dirs
