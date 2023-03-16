@@ -9,5 +9,7 @@ bool compare_dirent_name_fields(void *file1, void *file2) {
 }
 
 void mx_sort_dirent_structures(t_list *dirent_structures) {
+    if (!dirent_structures) return;
+    
     mx_sort_list(dirent_structures, compare_dirent_name_fields);
 }
