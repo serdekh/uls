@@ -1,10 +1,11 @@
 #include "../inc/uls.h"
 
 /*
- * TODO: Implement separating files and dir/files from each other
- * TODO: Implement -l flag
- * TODO: Implement poliflags input (-a -l)
- * TODO: Impelement '| cat -e' setting
+ * (1) TODO: Implement separating flags and dir/files from each other
+ * (2) TODO: Implement -l flag
+ * (3) TODO: Implement poliflags input (-a -l)
+ * (4) TODO: Improve Makefile
+ * (5) TODO: Impelement '| cat -e' setting
 */
 
 int main(int argc, char *argv[]) {
