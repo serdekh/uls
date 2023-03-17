@@ -1,3 +1,4 @@
+#pragma once
 #define _DEFAULT_SOURCE
 #include <dirent.h>
 
@@ -8,10 +9,14 @@
 
 #define FLAG_CHAR '-'
 #define CURRENT_DIRECTORY "."
-#define FLAG__HIDDEN_FILES_PRINTED "-a"
 #define FLAG__MORE_INFORMATATION_PRINTED "-l"
 
 typedef struct dirent t_dirent;
+
+typedef struct s_input_flags {
+    bool _a;
+    bool _l;
+} t_input_flags;
 
 /**
  * @brief sorts a list of dirent structures
@@ -62,21 +67,15 @@ void mx_try_opendir(DIR **dir, const char *name);
 void mx_direntcpy(t_dirent *dest, t_dirent *src);
 
 /**
- * @brief allocates memory for a list of flag strings
- * @param argc size of the array of the `main` function input
- * @param argv the array of the `main` function input
- * @return dynamic list of strings of flags. Should be freed with the mx_free_flags() function
+ * @brief prints all the files and directories with detailed information in the current dir
+ * @return nothing. If failed returns 1, otherwise 0
 */
-t_list *mx_get_flags(int argc, char **argv);
+void mx_handle_l_flag();
 
-/**
- * @brief frees all memory in the dynamic list
- * @param flags the list to be freed
- * @return nothing. If pointer is NULL, function returns
-*/
-void mx_free_flags(t_list *flags);
 
-/* The actual uls functions that represent the cmd calls*/
+// ---------------- The actual uls functions that represent the cmd calls ----------------
+
+
 
 /**
  * @brief calls 'uls' command without any parameters and prints files/dirs
@@ -84,4 +83,32 @@ void mx_free_flags(t_list *flags);
  * @return 0 if success or 1 if failed
 */
 void mx_uls_no_params();
+
+/**
+ * @brief (NOT IMPLEMENTED) calls 'uls' command with parameters and prints files/dirs
+ * in the alphabet order from the current directory but with a detailed info
+ * @return 0 if success or 1 if failed
+*/
+void mx_uls_with_params();
+
+/**
+ * @brief (NOT IMPLEMENTED) calls 'uls -l' command without any input but the -l flag and prints files/dirs
+ * in the alphabet order from the current directory with a more detailed information
+ * @return 0 if success or 1 if failed
+*/
+void mx_uls_only_l_flag();
+
+/**
+ * @brief (NOT IMPLEMENTED) calls 'uls [file ...] [dir ...]' command with files and dirs as input and prints files/dirs
+ * in the alphabet order from the current directory.
+ * @return 0 if success or 1 if failed
+*/
+void mx_uls_only_files_and_dirs();
+
+/**
+ * @brief (NOT IMPLEMENTED) calls 'uls -l [file ...] [dir ...]' command with files and dirs as input and prints files/dirs
+ * in the alphabet order with the detailed infortmation from the current directory. 
+ * @return 0 if success or 1 if failed
+*/
+void mx_uls_with_l_flag_and_files_with_dirs();
 
