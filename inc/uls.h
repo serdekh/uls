@@ -2,16 +2,27 @@
 #define _DEFAULT_SOURCE
 #include <dirent.h>
 
+#include <grp.h>
+#include <pwd.h>
+#include <time.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 
 #include "../inc/libmx/inc/libmx.h"
 
+#define SPACE ' '
+#define SUCCESS 0
+#define ULS_USAGE "usage: uls [-l] [file ...]\n"
 #define FLAG_CHAR '-'
 #define CURRENT_DIRECTORY "."
 #define FLAG__MORE_INFORMATATION_PRINTED "-l"
+#define DATE_FORMAT__MONTH_DATE_TIME "%B %d %H:%M"
 
+typedef struct stat t_stat;
+typedef struct passwd t_passwd;
 typedef struct dirent t_dirent;
+typedef struct timespec t_timespec;
 
 typedef struct s_input_flags {
     bool _a;
@@ -70,7 +81,7 @@ void mx_direntcpy(t_dirent *dest, t_dirent *src);
  * @brief prints all the files and directories with detailed information in the current dir
  * @return nothing. If failed returns 1, otherwise 0
 */
-void mx_handle_l_flag();
+void mx_handle_l_flag(t_list *dirent_structures);
 
 
 // ---------------- The actual uls functions that represent the cmd calls ----------------
@@ -79,17 +90,18 @@ void mx_handle_l_flag();
 
 /**
  * @brief calls 'uls' command without any parameters and prints files/dirs
+ * @param path path to the directory
  * in the alphabet order from the current directory
  * @return 0 if success or 1 if failed
 */
-void mx_uls_no_params();
+void mx_uls_no_params(char *path);
 
 /**
  * @brief (NOT IMPLEMENTED) calls 'uls' command with parameters and prints files/dirs
  * in the alphabet order from the current directory but with a detailed info
  * @return 0 if success or 1 if failed
 */
-void mx_uls_with_params();
+void mx_uls_with_params(int argc, char *argv[]);
 
 /**
  * @brief (NOT IMPLEMENTED) calls 'uls -l' command without any input but the -l flag and prints files/dirs
