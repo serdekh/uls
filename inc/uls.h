@@ -39,6 +39,8 @@ typedef struct s_detailed_information {
 
 t_list *mx_get_dirent_structures(const char *name);
 
+t_dirent *mx_get_dirent_structure(char *name);
+
 void mx_print_total(t_list *detailed_infos);
 void mx_try_opendir(DIR **dir, const char *name);
 void mx_direntcpy(t_dirent *dest, t_dirent *src);
