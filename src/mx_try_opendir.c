@@ -6,7 +6,11 @@ void mx_try_opendir(DIR **dir, const char *name) {
     *dir = opendir(name);
 
     if (!(*dir)) {
-        perror(strerror(errno));
-        exit(1);
+        char *error = strerror(errno);
+        mx_printerr("uls: ");
+        mx_printerr(name);
+        mx_printerr(": ");
+        mx_printerr(error);
+        exit(FAILURE);
     }
 }
