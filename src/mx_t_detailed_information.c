@@ -23,12 +23,9 @@ void mx_set_date(t_timespec *time, t_detailed_information *info) {
 
     int size = malloc_size(time_str_splitted) / sizeof(char **);
 
-    info->month = mx_strnew(3);
-    mx_strncpy(info->month, time_str_splitted[1], 3);
-    info->day = mx_strnew(2);
-    mx_strncpy(info->day, time_str_splitted[2], 2);
-    info->time = mx_strnew(5);
-    mx_strncpy(info->time, time_str_splitted[3], 5);
+    info->month = mx_strnewncpy(time_str_splitted[1], 3);
+    info->day = mx_strnewncpy(time_str_splitted[2], 2);
+    info->time = mx_strnewncpy(time_str_splitted[3], 5);
 
     for (int i = 0; i < size; i++) {
         free(time_str_splitted[i]);
@@ -72,10 +69,8 @@ void mx_set_detailed_info(char *filename, t_detailed_information *info) {
 
     mx_set_date(&modification_time, info);
 
-    info->file_name = mx_strnew(strlen(filename));
-    mx_strcpy(info->file_name, filename);
-
-    info->size = (int)file_stat.st_size;
+    info->file_name  = mx_strnewncpy(filename, strlen(filename));
+    info->size       = (int)file_stat.st_size;
     info->hard_links = (int)file_stat.st_nlink;
     info->block_size = (int)file_stat.st_blocks;
 }
@@ -118,7 +113,7 @@ void mx_print_detailed_info(t_detailed_information info, int spaces) {
 
 void mx_free_detailed_info(t_detailed_information *info) {
     if (!info) return;
-    
+
     free(info->file_name);
     free(info->month);
     free(info->day);
