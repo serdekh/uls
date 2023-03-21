@@ -1,5 +1,96 @@
 #include "../inc/uls.h"
 
+char *mx_remove_last_directory_move(char *path) {
+    char *result = NULL;
+
+    if (!path) {
+        result = mx_strnew(3);
+        result[0] = '.';
+        result[1] = '/';
+        result[2] = '\0';
+
+        return result;
+    }
+
+    int len = strlen(path);
+    int cut_len = 0;
+
+    for (int i = len - 1; i >= 0; i--) {
+        if (path[i] == '/') {
+            cut_len = i;
+        }
+    }
+
+    if (cut_len == 0) {
+        result = mx_strnew(3);
+        result[0] = '.';
+        result[1] = '/';
+        result[2] = '\0';
+
+        return result;
+    }
+
+    result = mx_strnewncpy(path, cut_len);
+
+    return result;
+}
+
+char *mx_get_last_file_or_directory(char *path) {
+    if (!path) return NULL;
+
+    char *name = NULL;
+
+    int slash_position = -1;
+    int len = strlen(path);
+
+    for (int i = len - 1; i >= 0; i--) {
+        if (path[i] == '/') {
+            slash_position = i;
+            break;
+        }
+    }
+
+    if (slash_position == -1) {
+        name = mx_strnewncpy(path, len);
+        return name;
+    }
+
+    name = mx_strnewncpy(&path[slash_position + 1], len - slash_position + 1);
+
+    return name;
+}
+
+t_dirent *mx_get_dirent_structure(char *name) {
+    if (!name) return NULL;
+
+    DIR *dir = NULL;
+    t_dirent *entry = NULL;
+    t_dirent *result = NULL;
+
+    char *directory = mx_remove_last_directory_move(name);
+
+    mx_try_opendir(&dir, directory);
+
+    char *filename = mx_get_last_file_or_directory(name);
+
+    free(directory);
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (mx_strcmp(entry->d_name, filename) == 0) {
+            result = (t_dirent *)malloc(sizeof(t_dirent));
+            mx_direntcpy(result, entry);
+            free(filename);
+            closedir(dir);
+            return result;
+        }
+    }
+
+    closedir(dir);
+    free(filename);
+
+    return NULL;
+}
+
 t_list *mx_get_dirent_structures(const char *name) {
     if (!name) return NULL;
 
