@@ -6,36 +6,66 @@ bool mx_is_flag(const char *s) {
     return (s[0] == '-');
 }
 
-t_list *mx_get_dirents(int argc, char **argv) {
+// FIXME: try to find the way how to print data inside a dir
+void mx_print_dirents(int argc, char **argv) {
+    if (!argv || argc <= 0) return;
+
     t_list *dirent_structures = NULL;
 
     for (int i = 1; i < argc; i++) {
-        //needs to create another function that will get a dirent struct by a name
-        dirent_structures = mx_get_dirent_structures(argv[i]);
+        t_dirent *dirent = mx_get_dirent_structure(argv[i]);
 
-        mx_printstr(argv[i]);
-        mx_printstr(":\n");
-
-        for (t_list *j = dirent_structures; j != NULL; j = j->next) {
-            t_dirent *temp = (t_dirent *)(j->data);
-
-            if (!mx_is_hidden_file(temp->d_name)) {
-                mx_printstrc(((t_dirent *)(j->data))->d_name, '\n');
-            }
+        if (dirent != NULL) {
+            mx_push_back(&dirent_structures, dirent);
         }
-
-        if (i != argc - 1) {
-            mx_printchar('\n');
-        }
-
-        mx_free_dirent_structures(dirent_structures);
     }
 
-    return NULL;
+    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        if (temp->d_type == DT_REG && !mx_is_hidden_file(temp->d_name)) {
+            mx_printstrc(temp->d_name, ' ');
+        }
+    }
+
+    mx_printchar('\n');
+
+    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        if (temp->d_type == DT_DIR && !mx_is_hidden_file(temp->d_name)) {
+            mx_printchar('\n');
+            mx_printstrc(temp->d_name, ':');
+            mx_printchar('\n');
+
+            t_list *dirent_structures_in_folder = mx_get_dirent_structures(temp->d_name);
+
+            mx_sort_dirent_structures(dirent_structures_in_folder);
+
+            for (t_list *j = dirent_structures_in_folder; j != NULL; j = j->next) {
+                t_dirent *temp = (t_dirent *)(j->data);
+
+                if (!mx_is_hidden_file(temp->d_name)) {
+                    mx_printstrc(temp->d_name, '\n');
+                }
+            }
+
+            mx_free_dirent_structures(dirent_structures_in_folder);
+        }
+    }
+
+    mx_free_dirent_structures(dirent_structures);
 }
 
-void mx_check_l_flag(int argc, char *argv[]) {
+void mx_check_l_flag(int argc, char **argv) {
     if (!argv) return;
+
+    for (int i = 2; i < argc; i++) {
+        if (mx_strcmp(argv[i], "-l") == 0) {
+            mx_printerr(ULS_USAGE);
+            exit(FAILURE);
+        }
+    }
 
     bool flag_l_found = mx_strcmp(argv[1], "-l") == 0;
     bool invalid_flag = (mx_is_flag(argv[1]) && argv[1][0] != 'l');
@@ -51,16 +81,18 @@ void mx_check_l_flag(int argc, char *argv[]) {
         exit(FAILURE);
     }
 
-    mx_get_dirents(argc, argv);
+    mx_print_dirents(argc, argv);
 
     exit(SUCCESS);
 }
 
-void mx_uls_with_params(int argc, char *argv[]) {
+void mx_uls_with_params(int argc, char **argv) {
     //FIXME: need to check what input we get
 
     mx_check_l_flag(argc, argv);
 
+    //FIXME: implement checking: either there are files and dirs after -l (then print info about them)
+    //       or use default setting 
     t_list *dirent_structures = mx_get_dirent_structures(CURRENT_DIRECTORY);
 
     mx_handle_l_flag(dirent_structures);
