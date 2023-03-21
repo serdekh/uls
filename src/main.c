@@ -3,9 +3,10 @@
 /*
  * (1) TODO: Implement separating flags and dir/files from each other
  *           By printing firstly the files and the contains of dirs
- * (2) TODO: Implement -l flag
  * (3) TODO: Improve Makefile
  * (4) TODO: Impelement '| cat -e' setting
+ * 
+ * (2) DONE: Implement -l flag
 */
 
 /*
@@ -14,11 +15,7 @@
 */
 
 int main(int argc, char *argv[]) {
-    if (argv) {} // to avoid clang error
-
     if (argc == 1) mx_uls_no_params(CURRENT_DIRECTORY);
-
     if (argc >= 2) mx_uls_with_params(argc, argv);
-
     return 0;
 }
