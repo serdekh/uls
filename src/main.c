@@ -15,6 +15,11 @@
 */
 
 int main(int argc, char *argv[]) {
+    // t_dirent *dirent = mx_get_dirent_structure("inc/uls.h");
+
+    // mx_printstrc(dirent->d_name, '\n');
+    // free(dirent);
+    
     if (argc == 1) mx_uls_no_params(CURRENT_DIRECTORY);
     if (argc >= 2) mx_uls_with_params(argc, argv);
     return 0;
