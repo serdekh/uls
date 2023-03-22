@@ -166,3 +166,80 @@ void mx_free_dirent_structures(t_list *dirent_structures_list) {
         mx_pop_front(&dirent_structures_list);
     }
 }
+
+void mx_print_dirent_structures_in_folder(t_dirent *folder) {
+    if (!folder) return;
+
+    t_list *dirent_structures_in_folder = mx_get_dirent_structures(folder->d_name);
+
+    if (!dirent_structures_in_folder) return;
+
+    mx_sort_dirent_structures(dirent_structures_in_folder);
+
+    mx_printstrc(folder->d_name, ':');
+    mx_printchar('\n');
+
+    for (t_list *j = dirent_structures_in_folder; j != NULL; j = j->next) {
+        t_dirent *temp = (t_dirent *)(j->data);
+
+        if (!mx_is_hidden_file(temp->d_name)) {
+            mx_printstrc(temp->d_name, '\n');
+        }
+    }
+
+    mx_free_dirent_structures(dirent_structures_in_folder);
+}
+
+void mx_print_folders(t_list *dirent_structures) {
+    if (!dirent_structures) return;
+
+    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        if (temp->d_type == DT_DIR && !mx_is_hidden_file(temp->d_name)) {
+            mx_printchar('\n');
+            mx_print_dirent_structures_in_folder(temp);
+        }
+    }
+}
+
+t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
+    if (!argv || argc <= 0) return NULL;
+
+    t_list *dirent_structures = NULL;
+
+    for (int i = 1; i < argc; i++) {
+        t_dirent *dirent = mx_get_dirent_structure(argv[i]);
+
+        if (dirent != NULL) {
+            mx_push_back(&dirent_structures, dirent);
+        }
+    }
+
+    return dirent_structures;
+}
+
+void mx_print_files_from_dirent_structures(t_list *dirent_structures) {
+    if (!dirent_structures) return;
+
+    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        if (temp->d_type == DT_REG && !mx_is_hidden_file(temp->d_name)) {
+            mx_printstrc(temp->d_name, ' ');
+        }
+    }
+    mx_printchar('\n');
+}
+
+// FIXME: try to find the way how to print data inside a dir
+void mx_print_dirents(int argc, char **argv) {
+    if (!argv || argc <= 0) return;
+
+    t_list *dirent_structures = mx_get_dirent_structures_from_array(argv, argc);
+
+    mx_print_files_from_dirent_structures(dirent_structures);
+    mx_print_folders(dirent_structures);
+    mx_free_dirent_structures(dirent_structures);
+}
+
