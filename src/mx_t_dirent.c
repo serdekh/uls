@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/uls_foreach.h"
 
 char *mx_remove_last_directory_move(char *path) {
     char *result = NULL;
@@ -126,22 +127,10 @@ void mx_sort_dirent_structures(t_list *dirent_structures) {
     mx_sort_list(dirent_structures, compare_dirent_name_fields);
 }
 
-void mx_print_files_and_directories(t_list *dirent_structures, bool hidden_are_printed) {
+void mx_print_files_and_directories(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
-        t_dirent *temp = (t_dirent *)(i->data);
-
-        bool only_not_hidden_printed = !mx_is_hidden_file(temp->d_name) && !hidden_are_printed;
-
-        if (hidden_are_printed || only_not_hidden_printed) {
-            mx_printstr(temp->d_name);
-
-            if (i->next != NULL) {
-                mx_printstr("  ");
-            }
-        }
-    }
+    mx_foreach_t_dirent_and_iterator(dirent_structures, mx_foreach_print_dirent);
 }
 
 void mx_direntcpy(t_dirent *dest, t_dirent *src) {
@@ -158,9 +147,7 @@ void mx_direntcpy(t_dirent *dest, t_dirent *src) {
 void mx_free_dirent_structures(t_list *dirent_structures_list) {
     if (!dirent_structures_list) return;
 
-    for (t_list *i = dirent_structures_list; i != NULL; i = i->next) {
-        free(i->data);
-    }
+    mx_foreach_t_dirent(dirent_structures_list, mx_foreach_free);
 
     while (dirent_structures_list != NULL) {
         mx_pop_front(&dirent_structures_list);
@@ -175,32 +162,16 @@ void mx_print_dirent_structures_in_folder(t_dirent *folder) {
     if (!dirent_structures_in_folder) return;
 
     mx_sort_dirent_structures(dirent_structures_in_folder);
-
     mx_printstrc(folder->d_name, ':');
     mx_printchar('\n');
-
-    for (t_list *j = dirent_structures_in_folder; j != NULL; j = j->next) {
-        t_dirent *temp = (t_dirent *)(j->data);
-
-        if (!mx_is_hidden_file(temp->d_name)) {
-            mx_printstrc(temp->d_name, '\n');
-        }
-    }
-
+    mx_foreach_t_dirent(dirent_structures_in_folder, mx_foreach_print_name_newline);
     mx_free_dirent_structures(dirent_structures_in_folder);
 }
 
 void mx_print_folders(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
-        t_dirent *temp = (t_dirent *)(i->data);
-
-        if (temp->d_type == DT_DIR && !mx_is_hidden_file(temp->d_name)) {
-            mx_printchar('\n');
-            mx_print_dirent_structures_in_folder(temp);
-        }
-    }
+    mx_foreach_t_dirent(dirent_structures, mx_foreach_print_folder);
 }
 
 t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
@@ -222,13 +193,7 @@ t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
 void mx_print_files_from_dirent_structures(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
-        t_dirent *temp = (t_dirent *)(i->data);
-
-        if (temp->d_type == DT_REG && !mx_is_hidden_file(temp->d_name)) {
-            mx_printstrc(temp->d_name, ' ');
-        }
-    }
+    mx_foreach_t_dirent(dirent_structures, mx_foreach_print_name);
     mx_printchar('\n');
 }
 
