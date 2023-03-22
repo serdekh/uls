@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/uls_error.h"
 
 bool mx_compare_two_detailed_infos(void *arg1, void *arg2) {
     return (
@@ -57,7 +58,7 @@ void mx_set_detailed_info(char *filename, t_detailed_information *info) {
 
     if (lstat(filename, &file_stat) == -1) {
         perror(strerror(errno));
-        exit(1);
+        exit(SUCCESS);
     }
 
     mx_set_permissions_string(info, file_stat.st_mode);
