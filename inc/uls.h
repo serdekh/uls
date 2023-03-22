@@ -40,21 +40,22 @@ t_list *mx_get_dirent_structures_from_array(char **argv, int argc);
 t_dirent *mx_get_dirent_structure(char *name);
 
 void mx_check_l_flag(int argc, char **argv);
-void mx_print_total(t_list *detailed_infos);
-void mx_print_dirents(int argc, char **argv);
 void mx_try_opendir(DIR **dir, const char *name);
 void mx_direntcpy(t_dirent *dest, t_dirent *src);
 void mx_handle_l_flag(t_list *dirent_structures);
-void mx_print_folders(t_list *dirent_structures);
 void mx_sort_detailed_infos(t_list *detailed_infos);
 void mx_free_detailed_infos(t_list *detailed_infos);
-void mx_print_detailed_infos(t_list *detailed_infos);
 void mx_sort_dirent_structures(t_list *dirent_structures);
-void mx_print_dirent_structures_in_folder(t_dirent *folder);
 void mx_free_dirent_structures(t_list *dirent_structures_list);
-void mx_print_files_from_dirent_structures(t_list *dirent_structures);
 void mx_set_detailed_info(char *filename, t_detailed_information *info);
-void mx_print_files_and_directories(t_list *dirent_structures, bool hidden_are_printed);
+
+void mx_print_total(t_list *detailed_infos);
+void mx_print_dirents(int argc, char **argv);
+void mx_print_folders(t_list *dirent_structures);
+void mx_print_detailed_infos(t_list *detailed_infos);
+void mx_print_dirent_structures_in_folder(t_dirent *folder);
+void mx_print_files_from_dirent_structures(t_list *dirent_structures);
+void mx_print_files_and_directories(t_list *dirent_structures);
 
 // ---------------- The actual uls functions that represent the cmd calls ----------------
 
