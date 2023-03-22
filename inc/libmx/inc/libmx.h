@@ -115,3 +115,4 @@ void mx_printstrc(const char *s, const char c);
 bool mx_is_hidden_file(const char *file_name);
 int mx_count_digits(int number);
 char *mx_strnewncpy(const char *src, int len);
+bool mx_is_flag(const char *s);
