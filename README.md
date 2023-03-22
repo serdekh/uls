@@ -1,2 +1,2 @@
 # uls
-Implementation of 'ls' command in linux shell
+Implementation of 'ls' with -l flag command in linux shell
