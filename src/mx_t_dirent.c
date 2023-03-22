@@ -19,6 +19,7 @@ char *mx_remove_last_directory_move(char *path) {
     for (int i = len - 1; i >= 0; i--) {
         if (path[i] == '/') {
             cut_len = i;
+            break;
         }
     }
 
@@ -79,6 +80,7 @@ t_dirent *mx_get_dirent_structure(char *name) {
     while ((entry = readdir(dir)) != NULL) {
         if (mx_strcmp(entry->d_name, filename) == 0) {
             result = (t_dirent *)malloc(sizeof(t_dirent));
+            mx_strcpy(entry->d_name, name);
             mx_direntcpy(result, entry);
             free(filename);
             closedir(dir);
@@ -159,10 +161,14 @@ void mx_print_dirent_structures_in_folder(t_dirent *folder) {
 
     t_list *dirent_structures_in_folder = mx_get_dirent_structures(folder->d_name);
 
-    if (!dirent_structures_in_folder) return;
+    mx_printstrc(folder->d_name, ':');
+
+    if (!dirent_structures_in_folder) {
+        mx_printstr("    # empty directory\n");
+        return;
+    }
 
     mx_sort_dirent_structures(dirent_structures_in_folder);
-    mx_printstrc(folder->d_name, ':');
     mx_printchar('\n');
     mx_foreach_t_dirent(dirent_structures_in_folder, mx_foreach_print_name_newline);
     mx_free_dirent_structures(dirent_structures_in_folder);
