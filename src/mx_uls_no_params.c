@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/uls_error.h"
 
 void mx_uls_no_params(char *path) {
     if (!path) {
