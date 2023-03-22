@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/uls_error.h"
 
 void mx_try_opendir(DIR **dir, const char *name) {
     if (!name) return;
