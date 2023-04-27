@@ -1,6 +1,21 @@
 #include "../inc/uls.h"
 #include "../inc/uls_foreach.h"
 
+char *mx_add_strings(char *str1, char *str2) {
+    if (!str1 || !str2) return NULL;
+
+    int str1len = strlen(str1);
+    int str2len = strlen(str2);
+
+    char *result = mx_strnew(str1len + str2len + 1);
+
+    mx_strncpy(result, str1, str1len);
+    result[str1len] = '/';
+    mx_strncpy(&result[str1len + 1], str2, str2len);
+
+    return result;
+} 
+
 char *mx_remove_last_directory_move(char *path) {
     char *result = NULL;
 
@@ -104,6 +119,8 @@ t_list *mx_get_dirent_structures(const char *name) {
     mx_try_opendir(&dir, name);
 
     while ((entry = readdir(dir)) != NULL) {
+        if (mx_is_hidden_file(entry->d_name)) continue;
+        
         t_dirent *list_element = (t_dirent *)malloc(sizeof(t_dirent));
 
         mx_direntcpy(list_element, entry);
@@ -149,7 +166,7 @@ void mx_direntcpy(t_dirent *dest, t_dirent *src) {
 void mx_free_dirent_structures(t_list *dirent_structures_list) {
     if (!dirent_structures_list) return;
 
-    mx_foreach_t_dirent(dirent_structures_list, mx_foreach_free);
+    mx_foreach_t_dirent(dirent_structures_list, mx_t_dirent_free);
 
     while (dirent_structures_list != NULL) {
         mx_pop_front(&dirent_structures_list);
@@ -164,20 +181,20 @@ void mx_print_dirent_structures_in_folder(t_dirent *folder) {
     mx_printstrc(folder->d_name, ':');
 
     if (!dirent_structures_in_folder) {
-        mx_printstr("    # empty directory\n");
+        mx_printstr("\t# empty directory\n");
         return;
     }
 
     mx_sort_dirent_structures(dirent_structures_in_folder);
     mx_printchar('\n');
-    mx_foreach_t_dirent(dirent_structures_in_folder, mx_foreach_print_name_newline);
+    mx_foreach_t_dirent(dirent_structures_in_folder, mx_t_dirent_print_name_newline);
     mx_free_dirent_structures(dirent_structures_in_folder);
 }
 
 void mx_print_folders(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    mx_foreach_t_dirent(dirent_structures, mx_foreach_print_folder);
+    mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_folder);
 }
 
 t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
@@ -199,7 +216,7 @@ t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
 void mx_print_files_from_dirent_structures(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    mx_foreach_t_dirent(dirent_structures, mx_foreach_print_name);
+    mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_name);
     mx_printchar('\n');
 }
 
