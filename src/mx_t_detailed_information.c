@@ -80,33 +80,6 @@ void mx_set_detailed_info(char *filename, t_detailed_information *info) {
     info->block_size = (int)file_stat.st_blocks;
 }
 
-t_list *mx_get_detailed_infos(t_dirent *folder) {
-    if (!folder) return NULL;
-
-    t_list *dirent_structures = mx_get_dirent_structures(folder->d_name);
-
-    // for (t_list *i = dirent_structures; i != NULL; i = i->next) {
-    //     printf("%s: %s\n", folder->d_name, ((t_dirent *)(i->data))->d_name);
-    // }
-
-    t_list *files = NULL;
-
-    for (t_list *t = dirent_structures; t != NULL; t = t->next) {
-        t_dirent *temp = (t_dirent *)(t->data);
-        t_detailed_information *info = (t_detailed_information *)malloc(sizeof(t_detailed_information));
-        mx_set_detailed_info(temp->d_name, info);
-        mx_push_back(&files, info);
-    }
-
-    mx_sort_detailed_infos(files);
-    mx_print_detailed_infos(files);
-    mx_free_detailed_infos(files);
-
-    mx_free_dirent_structures(dirent_structures);
-
-    return files;
-}
-
 int mx_get_max_digits_count(t_list *detailed_infos) {
     if (!detailed_infos) return -1;
     int max = 0;
@@ -116,9 +89,7 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
 
         int digits = mx_get_digits_count(temp->size);
 
-        if (digits > max) {
-            max = digits;
-        }
+        if (digits > max) max = digits;
     }
 
     return max;
@@ -165,14 +136,20 @@ void mx_print_detailed_infos(t_list *detailed_infos) {
 }
 
 void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos) {
-    if (!detailed_infos) return;
-
-
+    if (!detailed_infos) {
+        mx_printchar('\n');
+        mx_printstr(folder->d_name);
+        mx_printstr(":\t# empty directory\n");
+        return;
+    }
+    
     int max_digits_count = mx_get_max_digits_count(detailed_infos);
+
     mx_printchar('\n');
     mx_printstr(folder->d_name);
     mx_printstr(":\n");
     mx_print_total(detailed_infos);
+
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_detailed_information *temp = (t_detailed_information *)(i->data);
 
@@ -205,4 +182,20 @@ void mx_print_total(t_list *detailed_infos) {
     mx_printstr("total ");
     mx_printint(total / 2);
     mx_printchar('\n');
+}
+
+t_list *mx_parse_dirents_to_detailed_infos(t_list *dirent_structurs) {
+    if (!dirent_structurs) return NULL;
+
+    t_list *detailed_infos = NULL;
+
+    for (t_list *i = dirent_structurs; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        t_detailed_information *info = (t_detailed_information *)malloc(sizeof(t_detailed_information));
+        mx_set_detailed_info(temp->d_name, info);
+        mx_push_back(&detailed_infos, info);
+    }
+
+    return detailed_infos;
 }
