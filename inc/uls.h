@@ -62,8 +62,10 @@ void mx_print_files_from_dirent_structures(t_list *dirent_structures);
 void mx_print_files_and_directories(t_list *dirent_structures);
 t_list *mx_get_detailed_infos(t_dirent *folder); 
 void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos);
+t_list *mx_parse_dirents_to_detailed_infos(t_list *dirent_structurs);
 
 // ---------------- The actual uls functions that represent the cmd calls ----------------
 
-void mx_uls_no_params(char *path);
-void mx_uls_with_params(int argc, char *argv[]);
+void mx_call_uls_without_params(char *path);
+void mx_call_uls_with_params(int argc, char *argv[]);
+void mx_call_uls_l();
