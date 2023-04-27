@@ -1,6 +1,7 @@
 #include "../inc/uls.h"
 #include "../inc/uls_error.h"
 
+
 bool mx_compare_two_detailed_infos(void *arg1, void *arg2) {
     return (
         mx_strcmp(
@@ -57,8 +58,11 @@ void mx_set_detailed_info(char *filename, t_detailed_information *info) {
     t_stat file_stat;
 
     if (lstat(filename, &file_stat) == -1) {
-        perror(strerror(errno));
-        exit(SUCCESS);
+        mx_printerr("uls: ");
+        mx_printerr(filename);
+        mx_printerr(": ");
+        mx_printerr(strerror(errno));
+        exit(EXIT_FAILURE);
     }
 
     mx_set_permissions_string(info, file_stat.st_mode);
@@ -70,10 +74,37 @@ void mx_set_detailed_info(char *filename, t_detailed_information *info) {
 
     mx_set_date(&modification_time, info);
 
-    info->file_name  = mx_strnewncpy(filename, strlen(filename));
+    info->file_name  = mx_get_last_file_or_directory(filename);
     info->size       = (int)file_stat.st_size;
     info->hard_links = (int)file_stat.st_nlink;
     info->block_size = (int)file_stat.st_blocks;
+}
+
+t_list *mx_get_detailed_infos(t_dirent *folder) {
+    if (!folder) return NULL;
+
+    t_list *dirent_structures = mx_get_dirent_structures(folder->d_name);
+
+    // for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+    //     printf("%s: %s\n", folder->d_name, ((t_dirent *)(i->data))->d_name);
+    // }
+
+    t_list *files = NULL;
+
+    for (t_list *t = dirent_structures; t != NULL; t = t->next) {
+        t_dirent *temp = (t_dirent *)(t->data);
+        t_detailed_information *info = (t_detailed_information *)malloc(sizeof(t_detailed_information));
+        mx_set_detailed_info(temp->d_name, info);
+        mx_push_back(&files, info);
+    }
+
+    mx_sort_detailed_infos(files);
+    mx_print_detailed_infos(files);
+    mx_free_detailed_infos(files);
+
+    mx_free_dirent_structures(dirent_structures);
+
+    return files;
 }
 
 int mx_get_max_digits_count(t_list *detailed_infos) {
@@ -129,6 +160,22 @@ void mx_print_detailed_infos(t_list *detailed_infos) {
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_detailed_information *temp = (t_detailed_information *)(i->data);
+        mx_print_detailed_info(*temp, max_digits_count - mx_get_digits_count(temp->size));
+    }
+}
+
+void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos) {
+    if (!detailed_infos) return;
+
+
+    int max_digits_count = mx_get_max_digits_count(detailed_infos);
+    mx_printchar('\n');
+    mx_printstr(folder->d_name);
+    mx_printstr(":\n");
+    mx_print_total(detailed_infos);
+    for (t_list *i = detailed_infos; i != NULL; i = i->next) {
+        t_detailed_information *temp = (t_detailed_information *)(i->data);
+
         mx_print_detailed_info(*temp, max_digits_count - mx_get_digits_count(temp->size));
     }
 }
