@@ -1,3 +1,4 @@
+#include "../inc/uls.h"
 #include "../inc/uls_error.h"
 #include "../inc/libmx/inc/libmx.h"
 
@@ -16,4 +17,14 @@ void mx_print_invalid_option(char **argv) {
     mx_printerr("\n");
     mx_printerr(ULS_USAGE);
     exit(EXIT_FAILURE);
+}
+
+void mx_print_no_such_file_or_directory(char *file) {
+    if (!file) return;
+    
+    errno = ENOENT;
+    mx_printerr("uls: ");
+    mx_printerr(file);
+    mx_printerr(": ");
+    mx_printerr(strerror(errno));
 }
