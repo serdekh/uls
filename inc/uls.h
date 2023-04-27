@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 
 #include "../inc/libmx/inc/libmx.h"
 
@@ -33,6 +34,8 @@ typedef struct s_detailed_information {
     int block_size;
 } t_detailed_information;
 
+char *mx_add_strings(char *str1, char *str2);
+char *mx_get_last_file_or_directory(char *path);
 
 t_list *mx_get_dirent_structures(const char *name);
 t_list *mx_get_dirent_structures_from_array(char **argv, int argc);
@@ -45,6 +48,7 @@ void mx_direntcpy(t_dirent *dest, t_dirent *src);
 void mx_handle_l_flag(t_list *dirent_structures);
 void mx_sort_detailed_infos(t_list *detailed_infos);
 void mx_free_detailed_infos(t_list *detailed_infos);
+void mx_free_detailed_info(t_detailed_information *info);
 void mx_sort_dirent_structures(t_list *dirent_structures);
 void mx_free_dirent_structures(t_list *dirent_structures_list);
 void mx_set_detailed_info(char *filename, t_detailed_information *info);
@@ -56,6 +60,8 @@ void mx_print_detailed_infos(t_list *detailed_infos);
 void mx_print_dirent_structures_in_folder(t_dirent *folder);
 void mx_print_files_from_dirent_structures(t_list *dirent_structures);
 void mx_print_files_and_directories(t_list *dirent_structures);
+t_list *mx_get_detailed_infos(t_dirent *folder); 
+void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos);
 
 // ---------------- The actual uls functions that represent the cmd calls ----------------
 
