@@ -5,19 +5,19 @@
 bool mx_compare_two_detailed_infos(void *arg1, void *arg2) {
     return (
         mx_strcmp(
-            ((t_detailed_information *)(arg1))->file_name, 
-            ((t_detailed_information *)(arg2))->file_name
+            ((t_dirent_info *)(arg1))->file_name, 
+            ((t_dirent_info *)(arg2))->file_name
         ) > 0
     );
 }
 
-void mx_sort_detailed_infos(t_list *detailed_infos) {
+void mx_dirent_infos_sort(t_list *detailed_infos) {
     if (!detailed_infos) return;
 
     mx_sort_list(detailed_infos, mx_compare_two_detailed_infos);
 }
 
-void mx_set_date(t_timespec *time, t_detailed_information *info) {
+void mx_set_date(t_timespec *time, t_dirent_info *info) {
     if (!time || !info) return;
 
     char *time_str = ctime(&time->tv_sec);
@@ -36,7 +36,7 @@ void mx_set_date(t_timespec *time, t_detailed_information *info) {
     free(time_str_splitted);
 }
 
-void mx_set_permissions_string(t_detailed_information *info, mode_t file_mode) {
+void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode) {
     if (!info) return;
 
     info->permissions_string[0] = (S_ISDIR(file_mode)) ? 'd' : '-';
@@ -52,7 +52,7 @@ void mx_set_permissions_string(t_detailed_information *info, mode_t file_mode) {
     info->permissions_string[10] = '\0';
 }
 
-void mx_set_detailed_info(char *filename, t_detailed_information *info) {
+void mx_dirent_info_fill(char *filename, t_dirent_info *info) {
     if (!filename || !info) return;
 
     t_stat file_stat;
@@ -85,7 +85,7 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
     int max = 0;
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
-        t_detailed_information *temp = (t_detailed_information *)(i->data);
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
 
         int digits = mx_get_digits_count(temp->size);
 
@@ -95,7 +95,7 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
     return max;
 }
 
-void mx_print_detailed_info(t_detailed_information info, int spaces) {
+void mx_dirent_info_print(t_dirent_info info, int spaces) {
     mx_printstrc(info.permissions_string, SPACE);
     
     mx_printint(info.hard_links);
@@ -114,7 +114,7 @@ void mx_print_detailed_info(t_detailed_information info, int spaces) {
     mx_printstrc(info.file_name, '\n');
 }
 
-void mx_free_detailed_info(t_detailed_information *info) {
+void mx_dirent_info_free(t_dirent_info *info) {
     if (!info) return;
 
     free(info->file_name);
@@ -124,18 +124,18 @@ void mx_free_detailed_info(t_detailed_information *info) {
     free(info);
 }
 
-void mx_print_detailed_infos(t_list *detailed_infos) {
+void mx_dirent_infos_print(t_list *detailed_infos) {
     if (!detailed_infos) return;
 
     int max_digits_count = mx_get_max_digits_count(detailed_infos);
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
-        t_detailed_information *temp = (t_detailed_information *)(i->data);
-        mx_print_detailed_info(*temp, max_digits_count - mx_get_digits_count(temp->size));
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
+        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size));
     }
 }
 
-void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos) {
+void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos) {
     if (!detailed_infos) {
         mx_printchar('\n');
         mx_printstr(folder->d_name);
@@ -151,17 +151,17 @@ void mx_print_detailed_infos_in_folder(t_dirent *folder, t_list *detailed_infos)
     mx_print_total(detailed_infos);
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
-        t_detailed_information *temp = (t_detailed_information *)(i->data);
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
 
-        mx_print_detailed_info(*temp, max_digits_count - mx_get_digits_count(temp->size));
+        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size));
     }
 }
 
-void mx_free_detailed_infos(t_list *detailed_infos) {
+void mx_dirent_infos_free(t_list *detailed_infos) {
     if (!detailed_infos) return;
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
-        mx_free_detailed_info((t_detailed_information *)(i->data));
+        mx_dirent_info_free((t_dirent_info *)(i->data));
     }
 
     while (detailed_infos != NULL) {
@@ -175,7 +175,7 @@ void mx_print_total(t_list *detailed_infos) {
     int total = 0;
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
-        t_detailed_information *temp = (t_detailed_information *)(i->data);
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
         total += temp->block_size;
     }
 
@@ -184,7 +184,7 @@ void mx_print_total(t_list *detailed_infos) {
     mx_printchar('\n');
 }
 
-t_list *mx_parse_dirents_to_detailed_infos(t_list *dirent_structurs) {
+t_list *mx_dirents_parse_to_dirent_infos(t_list *dirent_structurs) {
     if (!dirent_structurs) return NULL;
 
     t_list *detailed_infos = NULL;
@@ -192,8 +192,8 @@ t_list *mx_parse_dirents_to_detailed_infos(t_list *dirent_structurs) {
     for (t_list *i = dirent_structurs; i != NULL; i = i->next) {
         t_dirent *temp = (t_dirent *)(i->data);
 
-        t_detailed_information *info = (t_detailed_information *)malloc(sizeof(t_detailed_information));
-        mx_set_detailed_info(temp->d_name, info);
+        t_dirent_info *info = (t_dirent_info *)malloc(sizeof(t_dirent_info));
+        mx_dirent_info_fill(temp->d_name, info);
         mx_push_back(&detailed_infos, info);
     }
 

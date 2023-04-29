@@ -60,6 +60,6 @@ void mx_t_dirent_print_name_newline(t_dirent *temp) {
 void mx_t_dirent_print_folder(t_dirent *temp) {
     if (temp->d_type == DT_DIR && !mx_is_hidden_file(temp->d_name)) {
         mx_printchar('\n');
-        mx_print_dirent_structures_in_folder(temp);
+        mx_dirents_print_from_folder(temp);
     }
 }

@@ -3,7 +3,7 @@
 #include "../inc/uls_error.h"
 #include "../inc/uls_foreach.h"
 
-t_dirent *mx_get_dirent_structure(char *name) {
+t_dirent *mx_dirent_get(char *name) {
     if (!name) return NULL;
 
     DIR *dir = NULL;
@@ -21,10 +21,13 @@ t_dirent *mx_get_dirent_structure(char *name) {
     while ((entry = readdir(dir)) != NULL) {
         if (mx_strcmp(entry->d_name, filename) == 0) {
             result = (t_dirent *)malloc(sizeof(t_dirent));
+
             mx_strcpy(entry->d_name, name);
-            mx_direntcpy(result, entry);
+            mx_dirent_copy(result, entry);
+
             free(filename);
             closedir(dir);
+
             return result;
         }
     }
@@ -35,7 +38,7 @@ t_dirent *mx_get_dirent_structure(char *name) {
     return NULL;
 }
 
-t_list *mx_get_dirent_structures(const char *name) {
+t_list *mx_dirents_get(const char *name) {
     if (!name) return NULL;
 
     DIR *dir = NULL;
@@ -49,7 +52,7 @@ t_list *mx_get_dirent_structures(const char *name) {
         
         t_dirent *list_element = (t_dirent *)malloc(sizeof(t_dirent));
 
-        mx_direntcpy(list_element, entry);
+        mx_dirent_copy(list_element, entry);
         mx_push_back(&dirent_structures, list_element);
     }
 
@@ -66,19 +69,19 @@ bool compare_dirent_name_fields(void *file1, void *file2) {
     );
 }
 
-void mx_sort_dirent_structures(t_list *dirent_structures) {
+void mx_dirents_sort(t_list *dirent_structures) {
     if (!dirent_structures) return;
     
     mx_sort_list(dirent_structures, compare_dirent_name_fields);
 }
 
-void mx_print_files_and_directories(t_list *dirent_structures) {
+void mx_dirents_print_both(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
     mx_foreach_t_dirent_and_iterator(dirent_structures, mx_foreach_print_dirent);
 }
 
-void mx_direntcpy(t_dirent *dest, t_dirent *src) {
+void mx_dirent_copy(t_dirent *dest, t_dirent *src) {
     if (!dest || !src) return;
 
     mx_strcpy(dest->d_name, src->d_name);
@@ -89,7 +92,7 @@ void mx_direntcpy(t_dirent *dest, t_dirent *src) {
     dest->d_reclen = src->d_reclen;
 }
 
-void mx_free_dirent_structures(t_list *dirent_structures_list) {
+void mx_dirents_free(t_list *dirent_structures_list) {
     if (!dirent_structures_list) return;
 
     mx_foreach_t_dirent(dirent_structures_list, mx_t_dirent_free);
@@ -99,10 +102,10 @@ void mx_free_dirent_structures(t_list *dirent_structures_list) {
     }
 }
 
-void mx_print_dirent_structures_in_folder(t_dirent *folder) {
+void mx_dirents_print_from_folder(t_dirent *folder) {
     if (!folder) return;
 
-    t_list *dirent_structures_in_folder = mx_get_dirent_structures(folder->d_name);
+    t_list *dirent_structures_in_folder = mx_dirents_get(folder->d_name);
 
     mx_printstrc(folder->d_name, ':');
 
@@ -111,29 +114,29 @@ void mx_print_dirent_structures_in_folder(t_dirent *folder) {
         return;
     }
 
-    mx_sort_dirent_structures(dirent_structures_in_folder);
+    mx_dirents_sort(dirent_structures_in_folder);
     mx_printchar('\n');
     mx_foreach_t_dirent(dirent_structures_in_folder, mx_t_dirent_print_name_newline);
-    mx_free_dirent_structures(dirent_structures_in_folder);
+    mx_dirents_free(dirent_structures_in_folder);
 }
 
-void mx_print_folders(t_list *dirent_structures) {
+void mx_dirents_print_folders(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
     mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_folder);
 }
 
-t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
+t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
     if (!argv || argc <= 0) return NULL;
 
     t_list *dirent_structures = NULL;
 
     for (int i = 1; i < argc; i++) {
-        t_dirent *dirent = mx_get_dirent_structure(argv[i]);
+        t_dirent *dirent = mx_dirent_get(argv[i]);
 
         if (dirent == NULL) {
             mx_print_no_such_file_or_directory(argv[i]);
-            mx_free_dirent_structures(dirent_structures);
+            mx_dirents_free(dirent_structures);
             exit(EXIT_FAILURE);
         }
 
@@ -143,20 +146,20 @@ t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
     return dirent_structures;
 }
 
-void mx_print_files_from_dirent_structures(t_list *dirent_structures) {
+void mx_dirents_print_files(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
     mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_name);
     mx_printchar('\n');
 }
 
-void mx_print_dirents(int argc, char **argv) {
+void mx_dirents_print(int argc, char **argv) {
     if (!argv || argc <= 0) return;
 
-    t_list *dirent_structures = mx_get_dirent_structures_from_array(argv, argc);
+    t_list *dirent_structures = mx_dirents_get_from_main_input(argv, argc);
 
-    mx_print_files_from_dirent_structures(dirent_structures);
-    mx_print_folders(dirent_structures);
-    mx_free_dirent_structures(dirent_structures);
+    mx_dirents_print_files(dirent_structures);
+    mx_dirents_print_folders(dirent_structures);
+    mx_dirents_free(dirent_structures);
 }
 
