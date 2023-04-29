@@ -34,9 +34,19 @@ void mx_t_dirent_free(t_dirent *temp) {
     free(temp);
 }
 
-void mx_t_dirent_print_name(t_dirent *temp) {
-    if (temp->d_type == DT_REG && !mx_is_hidden_file(temp->d_name)) {
-        mx_printstrc(temp->d_name, ' ');
+void mx_t_dirent_print_name(t_dirent *temp, t_list *i) {
+    if (!mx_is_hidden_file(temp->d_name)) {
+        mx_printstr(temp->d_name);
+        
+        if (isatty(STDOUT_FILENO) != 0) {
+            if (i->next != NULL) {
+                mx_printchar(SPACE);    
+                mx_printchar(SPACE);
+            }
+        }
+        else {
+            mx_printchar('\n');
+        }
     }
 }
 
