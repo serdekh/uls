@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     // printf ("lines %d\n", w.ws_row);
     // printf ("columns %d\n", w.ws_col);
     
+    if (argc == 1 && isatty(STDOUT_FILENO) == 0) mx_call_uls_cat_e();
     if (argc == 1) mx_call_uls_without_params(CURRENT_DIRECTORY);
     if (argc >= 2) mx_call_uls_with_params(argc, argv);
     return 0;
