@@ -1,5 +1,18 @@
 #include "../inc/uls.h"
 #include "../inc/uls_error.h"
+#include "../inc/uls_foreach.h"
+
+void mx_call_uls_cat_e() {
+    t_list *dirents = mx_dirents_get(CURRENT_DIRECTORY);
+
+    if (!dirents) return;
+
+    mx_dirents_sort(dirents);
+    mx_foreach_t_dirent(dirents, mx_t_dirent_print_name_newline);
+    mx_dirents_free(dirents);
+
+    exit(EXIT_SUCCESS);
+}
 
 void mx_call_uls_without_params(char *path) {
     if (!path) path = CURRENT_DIRECTORY;
@@ -17,6 +30,7 @@ void mx_call_uls_l() {
     t_list *dirents = mx_dirents_get(CURRENT_DIRECTORY);
     t_list *dirent_infos = mx_dirents_parse_to_dirent_infos(dirents);
 
+    mx_print_total(dirent_infos);
     mx_dirent_infos_sort(dirent_infos);
     mx_dirent_infos_print(dirent_infos);
     mx_dirent_infos_free(dirent_infos);
@@ -46,5 +60,6 @@ void mx_call_uls_with_params(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
+    mx_dirents_sort(main_input_dirents);
     mx_handle_l_flag(main_input_dirents);
 }
