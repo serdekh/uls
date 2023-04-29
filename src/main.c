@@ -1,12 +1,13 @@
 #include "../inc/uls.h"
 
 /*
+ * (0) TODO: Implement table printing in without -l case
  * (3) TODO: Improve Makefile
- * (4) TODO: Impelement '| cat -e' setting
  * 
  * (1) DONE (MAYBE): Implement separating flags and dir/files from each other
  *           By printing firstly the files and the contains of dirs
  * (2) DONE: Implement -l flag
+ * (4) DONE (MAYBE, REQUIRES SOME TESTS): Impelement '| cat -e' setting
 */
 
 int main(int argc, char *argv[]) {
