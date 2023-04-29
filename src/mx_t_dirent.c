@@ -1,5 +1,6 @@
 #include "../inc/uls.h"
 #include "../inc/utils.h"
+#include "../inc/uls_error.h"
 #include "../inc/uls_foreach.h"
 
 t_dirent *mx_get_dirent_structure(char *name) {
@@ -130,9 +131,13 @@ t_list *mx_get_dirent_structures_from_array(char **argv, int argc) {
     for (int i = 1; i < argc; i++) {
         t_dirent *dirent = mx_get_dirent_structure(argv[i]);
 
-        if (dirent != NULL) {
-            mx_push_back(&dirent_structures, dirent);
+        if (dirent == NULL) {
+            mx_print_no_such_file_or_directory(argv[i]);
+            mx_free_dirent_structures(dirent_structures);
+            exit(EXIT_FAILURE);
         }
+
+        mx_push_back(&dirent_structures, dirent);
     }
 
     return dirent_structures;
