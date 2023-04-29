@@ -146,11 +146,30 @@ t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
     return dirent_structures;
 }
 
+void mx_dirents_print_of_type(t_list *dirents, unsigned char type_printed) {
+    for (t_list *i = dirents; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+
+        if (mx_is_hidden_file(temp->d_name) || temp->d_type != type_printed) continue;
+
+        mx_printstr(temp->d_name);
+        
+        if (isatty(STDOUT_FILENO) != 0) {
+            if (i->next != NULL) {
+                mx_printchar(SPACE);    
+                mx_printchar(SPACE);
+            }
+        }
+        else {
+            mx_printchar('\n');
+        }
+    }
+}
+
+//FIXME: change foreach function so it doesn't print a char in the end
 void mx_dirents_print_files(t_list *dirent_structures) {
     if (!dirent_structures) return;
-
-    mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_name);
-    mx_printchar('\n');
+    mx_dirents_print_of_type(dirent_structures, DT_REG);
 }
 
 void mx_dirents_print(int argc, char **argv) {
@@ -158,6 +177,7 @@ void mx_dirents_print(int argc, char **argv) {
 
     t_list *dirent_structures = mx_dirents_get_from_main_input(argv, argc);
 
+    mx_dirents_sort(dirent_structures);
     mx_dirents_print_files(dirent_structures);
     mx_dirents_print_folders(dirent_structures);
     mx_dirents_free(dirent_structures);
