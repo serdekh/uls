@@ -166,7 +166,6 @@ void mx_dirents_print_of_type(t_list *dirents, unsigned char type_printed) {
     }
 }
 
-//FIXME: change foreach function so it doesn't print a char in the end
 void mx_dirents_print_files(t_list *dirent_structures) {
     if (!dirent_structures) return;
     mx_dirents_print_of_type(dirent_structures, DT_REG);
