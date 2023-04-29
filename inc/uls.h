@@ -96,10 +96,12 @@ void mx_print_total(t_list *detailed_infos);
  *  Here is a formula of the following functions: mx_call_uls_...()      
  * 
  *  mx_call_uls_l()              == ~$./uls -l
+ *  mx_call_uls_cat_e()          == ~$./uls | cat -e
  *  mx_call_uls_with_params()    == ~$./uls [-l] argv[1], argv[2], ..., argv[N] (-l is optional)
  *  mx_call_uls_without_params() == ~$./uls  
 */
 
 void mx_call_uls_l();
+void mx_call_uls_cat_e();
 void mx_call_uls_without_params(char *path);
 void mx_call_uls_with_params(int argc, char *argv[]);
