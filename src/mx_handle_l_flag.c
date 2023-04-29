@@ -8,16 +8,8 @@ void mx_check_l_flag(int argc, char **argv) {
 
     bool flag_l_found = mx_strcmp(argv[1], "-l") == 0;
 
-    if (flag_l_found) {
-        return;
-    }
-
-    bool invalid_flag = (mx_is_flag(argv[1]) && argv[1][0] != 'l');
-
-    if (invalid_flag) {
-        mx_print_invalid_option(argv);
-    }
-
+    if (flag_l_found) return;
+    
     mx_print_dirents(argc, argv);
 
     exit(EXIT_SUCCESS);
