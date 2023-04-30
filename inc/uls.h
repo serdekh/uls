@@ -19,6 +19,7 @@
 typedef struct stat t_stat;
 typedef struct passwd t_passwd;
 typedef struct dirent t_dirent;
+typedef struct winsize t_winsize;
 typedef struct timespec t_timespec;
 
 typedef struct s_dirent_info {
@@ -75,10 +76,15 @@ void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos)
 t_list *mx_dirents_get(const char *name); //mx_get_dirent_structures
 t_list *mx_dirents_get_from_main_input(char **argv, int argc); //mx_get_dirent_structures_from_array
 
-t_dirent *mx_dirent_get(char *name); //mx_get_dirent_structure
-
 t_list *mx_dirent_infos_get(t_dirent *folder); //mx_get_detailed_infos
 t_list *mx_dirents_parse_to_dirent_infos(t_list *dirent_structurs); //mx_parse_dirents_to_detailed_infos
+
+t_dirent *mx_dirent_new();
+t_dirent *mx_dirent_get(char *name); //mx_get_dirent_structure
+t_dirent **mx_dirents_parse_to_array(t_list *dirents, size_t *size);
+
+t_dirent_info *mx_dirent_info_new();
+
 
 
 void mx_check_l_flag(int argc, char **argv);
@@ -86,6 +92,12 @@ void mx_try_opendir(DIR **dir, const char *name);
 void mx_handle_l_flag(t_list *dirent_structures);
 
 void mx_print_total(t_list *detailed_infos);
+
+
+
+void mx_print_table(t_dirent **dirents, size_t size);
+
+
 
 /**
  *          -- Uls functions --
