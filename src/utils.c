@@ -1,3 +1,4 @@
+#include "../inc/uls.h"
 #include "../inc/utils.h"
 
 char *mx_add_strings(char *str1, char *str2) {
@@ -74,4 +75,12 @@ char *mx_get_last_file_or_directory(char *path) {
     name = mx_strnewncpy(&path[slash_position + 1], len - slash_position + 1);
 
     return name;
+}
+
+t_winsize mx_get_winsize() {
+    struct winsize window_size;
+
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
+
+    return window_size;
 }
