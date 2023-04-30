@@ -3,6 +3,11 @@
 #include "../inc/uls_error.h"
 #include "../inc/uls_foreach.h"
 
+t_dirent *mx_dirent_new() {
+    t_dirent *result = (t_dirent *)malloc(sizeof(t_dirent));
+    return result;
+}
+
 t_dirent *mx_dirent_get(char *name) {
     if (!name) return NULL;
 
@@ -20,7 +25,7 @@ t_dirent *mx_dirent_get(char *name) {
 
     while ((entry = readdir(dir)) != NULL) {
         if (mx_strcmp(entry->d_name, filename) == 0) {
-            result = (t_dirent *)malloc(sizeof(t_dirent));
+            result = mx_dirent_new();
 
             mx_strcpy(entry->d_name, name);
             mx_dirent_copy(result, entry);
@@ -50,7 +55,7 @@ t_list *mx_dirents_get(const char *name) {
     while ((entry = readdir(dir)) != NULL) {
         if (mx_is_hidden_file(entry->d_name)) continue;
         
-        t_dirent *list_element = (t_dirent *)malloc(sizeof(t_dirent));
+        t_dirent *list_element = mx_dirent_new();
 
         mx_dirent_copy(list_element, entry);
         mx_push_back(&dirent_structures, list_element);
@@ -79,6 +84,23 @@ void mx_dirents_print_both(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
     mx_foreach_t_dirent_and_iterator(dirent_structures, mx_foreach_print_dirent);
+}
+
+void mx_dirents_print_table(t_list *dirents) {
+    if (!dirents) return;
+
+    size_t parsed_len = 0;
+    t_dirent **parsed = mx_dirents_parse_to_array(dirents, &parsed_len);
+
+    if (!parsed) return;
+
+    mx_print_table(parsed, parsed_len);
+
+    for (size_t i = 0; i < parsed_len; i++) {
+        free(parsed[i]);
+    }
+
+    free(parsed);
 }
 
 void mx_dirent_copy(t_dirent *dest, t_dirent *src) {
@@ -123,7 +145,24 @@ void mx_dirents_print_from_folder(t_dirent *folder) {
 void mx_dirents_print_folders(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    mx_foreach_t_dirent(dirent_structures, mx_t_dirent_print_folder);
+    for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_dirent *folder = (t_dirent *)(i->data);
+
+        if (folder->d_type != DT_DIR) continue;
+
+        mx_printstr(folder->d_name);
+        mx_printstr(":\n");
+
+        t_list *dirents_in_folder = mx_dirents_get(folder->d_name);
+
+        mx_dirents_sort(dirents_in_folder);
+
+        mx_dirents_print_table(dirents_in_folder);
+
+        mx_dirents_free(dirents_in_folder);
+
+        if (i->next != NULL) mx_printchar('\n');
+    }
 }
 
 t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
@@ -171,6 +210,45 @@ void mx_dirents_print_files(t_list *dirent_structures) {
     mx_dirents_print_of_type(dirent_structures, DT_REG);
 }
 
+
+t_dirent **mx_dirents_parse_to_array(t_list *dirents, size_t *size) {
+    if (!dirents || !size) return NULL;
+
+    *size = mx_list_size(dirents);
+
+    t_dirent **array = (t_dirent **)malloc(sizeof(t_dirent *) * (*size));
+
+    if (!array) {
+        *size = 0;
+        return NULL;
+    }
+
+    size_t array_i = 0;
+
+    for (t_list *t = dirents; t != NULL; t = t->next) {
+        t_dirent *temp = (t_dirent *)(t->data);
+
+        array[array_i] = mx_dirent_new();
+
+        if (!array[array_i]) {
+            for (size_t i = 0; i < array_i; i++) {
+                free(array[i]);
+            }
+
+            free(array);
+
+            return NULL;
+        }
+
+        mx_dirent_copy(array[array_i], temp);
+
+        array_i++;
+    }
+
+    return array;
+}
+
+
 void mx_dirents_print(int argc, char **argv) {
     if (!argv || argc <= 0) return;
 
@@ -181,4 +259,3 @@ void mx_dirents_print(int argc, char **argv) {
     mx_dirents_print_folders(dirent_structures);
     mx_dirents_free(dirent_structures);
 }
-
