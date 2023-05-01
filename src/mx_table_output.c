@@ -29,7 +29,7 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
             mx_replace_carriages(dirents[i]->d_name, '?');
             mx_printstr(dirents[k]->d_name);
 
-            if (!(--cols) || k + rows >= size) {
+            if (!(--cols) || k + rows > size) {
                 mx_printchar('\n');
                 cols = max_size / (max_d_len);
                 break;
@@ -38,7 +38,7 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
             int kth_dirent_len = mx_strlen(dirents[k]->d_name);
 
             if (kth_dirent_len % 8) {
-                mx_printchar('\t');
+               (rows == 1) ? mx_printstr("  ") : mx_printchar('\t');
             }
 
             add_tabs(max_d_len, kth_dirent_len);

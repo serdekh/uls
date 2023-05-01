@@ -55,6 +55,8 @@ char *mx_get_last_file_or_directory(char *path);
  *  mx_dirent_infos_...() == a function that works with a list/array of the t_dirent_info structs 
 */
 
+bool mx_dirents_print_files(t_list *dirent_structures); //mx_print_files_from_dirent_structures
+
 void mx_dirent_copy(t_dirent *dest, t_dirent *src); //mx_direntcpy
 
 void mx_dirents_print(int argc, char **argv); //mx_print_dirents
@@ -62,7 +64,6 @@ void mx_dirents_sort(t_list *dirent_structures); //mx_sort_dirent_structures
 void mx_dirents_print_from_folder(t_dirent *folder); //mx_print_dirent_structures_in_folder
 void mx_dirents_free(t_list *dirent_structures_list); //mx_free_dirent_structures
 void mx_dirents_print_both(t_list *dirent_structures); //mx_print_files_and_directories
-void mx_dirents_print_files(t_list *dirent_structures); //mx_print_files_from_dirent_structures
 void mx_dirents_print_folders(t_list *dirent_structures); //mx_print_folders
 
 void mx_dirent_info_free(t_dirent_info *info); //mx_free_detailed_info
@@ -115,5 +116,5 @@ void mx_print_table(t_dirent **dirents, size_t size);
 
 void mx_call_uls_l();
 void mx_call_uls_cat_e();
-void mx_call_uls_without_params(char *path);
+void mx_call_uls_without_params(char *path, bool exit_program);
 void mx_call_uls_with_params(int argc, char *argv[]);

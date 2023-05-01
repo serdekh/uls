@@ -113,6 +113,7 @@ void mx_dirent_info_print(t_dirent_info info, int spaces) {
     mx_printint(info.size);
     mx_printchar(SPACE);
     mx_printstrc(info.month, SPACE);
+    if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
     mx_printstrc(info.day, SPACE);
     mx_printstrc(info.time, SPACE);
     mx_printstrc(info.file_name, '\n');
@@ -141,18 +142,14 @@ void mx_dirent_infos_print(t_list *detailed_infos) {
 
 void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos) {
     if (!detailed_infos) {
-        mx_printchar('\n');
         mx_printstr(folder->d_name);
         mx_printstr(":\t# empty directory\n");
         return;
     }
     
-    int max_digits_count = mx_get_max_digits_count(detailed_infos);
-
-    mx_printchar('\n');
-    mx_printstr(folder->d_name);
-    mx_printstr(":\n");
     mx_print_total(detailed_infos);
+
+    int max_digits_count = mx_get_max_digits_count(detailed_infos);
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);

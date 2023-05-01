@@ -73,7 +73,7 @@ char *mx_get_last_file_or_directory(char *path) {
     }
 
     name = mx_strnewncpy(&path[slash_position + 1], len - slash_position + 1);
-
+   
     return name;
 }
 

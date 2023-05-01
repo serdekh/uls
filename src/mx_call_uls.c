@@ -14,7 +14,7 @@ void mx_call_uls_cat_e() {
     exit(EXIT_SUCCESS);
 }
 
-void mx_call_uls_without_params(char *path) {
+void mx_call_uls_without_params(char *path, bool exit_program) {
     if (!path) path = CURRENT_DIRECTORY;
     
     t_list *entries = mx_dirents_get(path);
@@ -23,7 +23,7 @@ void mx_call_uls_without_params(char *path) {
     mx_dirents_print_both(entries);
     mx_dirents_free(entries);
 
-    exit(EXIT_SUCCESS);
+    if (exit_program) exit(EXIT_SUCCESS);
 }
 
 void mx_call_uls_l() {
