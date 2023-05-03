@@ -24,6 +24,15 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
     int cols = max_size / (max_d_len);
     int rows = (size % cols) ? size / cols + 1 : size / cols;
 
+    if (rows == 1) {
+        for (int i = 0; i < size; i++) {
+            mx_printstr(dirents[i]->d_name);
+
+            if (i != size - 1) mx_printstr("  ");
+        }
+        return;
+    }
+
     for (int i = 0; i < rows; i++) {
         for (int k = i; k < size; k += rows) {
             mx_replace_carriages(dirents[i]->d_name, '?');

@@ -3,11 +3,11 @@
 
 /*
  * (0) TODO: Implement table printing in without -l case
- * (3) TODO: Improve Makefile
  * 
  * (1) DONE (MAYBE): Implement separating flags and dir/files from each other
  *           By printing firstly the files and the contains of dirs
  * (2) DONE: Implement -l flag
+ * (3) DONE: Improve Makefile
  * (4) DONE (MAYBE, REQUIRES SOME TESTS): Impelement '| cat -e' setting
 */
 

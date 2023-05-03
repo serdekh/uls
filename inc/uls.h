@@ -55,33 +55,33 @@ char *mx_get_last_file_or_directory(char *path);
  *  mx_dirent_infos_...() == a function that works with a list/array of the t_dirent_info structs 
 */
 
-bool mx_dirents_print_files(t_list *dirent_structures); //mx_print_files_from_dirent_structures
+bool mx_dirents_print_files(t_list *dirent_structures); 
 
-void mx_dirent_copy(t_dirent *dest, t_dirent *src); //mx_direntcpy
+void mx_dirent_copy(t_dirent *dest, t_dirent *src);
 
-void mx_dirents_print(int argc, char **argv); //mx_print_dirents
-void mx_dirents_sort(t_list *dirent_structures); //mx_sort_dirent_structures
-void mx_dirents_print_from_folder(t_dirent *folder); //mx_print_dirent_structures_in_folder
-void mx_dirents_free(t_list *dirent_structures_list); //mx_free_dirent_structures
-void mx_dirents_print_both(t_list *dirent_structures); //mx_print_files_and_directories
-void mx_dirents_print_folders(t_list *dirent_structures); //mx_print_folders
+void mx_dirents_print(int argc, char **argv); 
+void mx_dirents_sort(t_list *dirent_structures); 
+void mx_dirents_print_from_folder(t_dirent *folder); 
+void mx_dirents_free(t_list *dirent_structures_list); 
+void mx_dirents_print_both(t_list *dirent_structures); 
+void mx_dirents_print_folders(t_list *dirent_structures); 
 
-void mx_dirent_info_free(t_dirent_info *info); //mx_free_detailed_info
-void mx_dirent_info_fill(char *filename, t_dirent_info *info); //mx_set_detailed_info
+void mx_dirent_info_free(t_dirent_info *info); 
+void mx_dirent_info_fill(char *filename, t_dirent_info *info); 
 
-void mx_dirent_infos_sort(t_list *detailed_infos); //mx_sort_detailed_infos
-void mx_dirent_infos_free(t_list *detailed_infos); //mx_free_detailed_infos
-void mx_dirent_infos_print(t_list *detailed_infos); //mx_print_detailed_infos
-void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos); //mx_print_detailed_infos_in_folder
+void mx_dirent_infos_sort(t_list *detailed_infos); 
+void mx_dirent_infos_free(t_list *detailed_infos); 
+void mx_dirent_infos_print(t_list *detailed_infos); 
+void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos); 
 
-t_list *mx_dirents_get(const char *name); //mx_get_dirent_structures
-t_list *mx_dirents_get_from_main_input(char **argv, int argc); //mx_get_dirent_structures_from_array
+t_list *mx_dirents_get(const char *name); 
+t_list *mx_dirents_get_from_main_input(char **argv, int argc); 
 
-t_list *mx_dirent_infos_get(t_dirent *folder); //mx_get_detailed_infos
-t_list *mx_dirents_parse_to_dirent_infos(t_list *dirent_structurs); //mx_parse_dirents_to_detailed_infos
+t_list *mx_dirent_infos_get(t_dirent *folder);
+t_list *mx_dirents_parse_to_dirent_infos(t_list *dirent_structurs);
 
 t_dirent *mx_dirent_new();
-t_dirent *mx_dirent_get(char *name); //mx_get_dirent_structure
+t_dirent *mx_dirent_get(char *name); 
 t_dirent **mx_dirents_parse_to_array(t_list *dirents, size_t *size);
 
 t_dirent_info *mx_dirent_info_new();

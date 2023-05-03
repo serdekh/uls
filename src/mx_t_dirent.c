@@ -74,21 +74,14 @@ bool compare_dirent_name_fields(void *file1, void *file2) {
     );
 }
 
-void mx_dirents_sort(t_list *dirent_structures) {
-    if (!dirent_structures) return;
-    
-    mx_sort_list(dirent_structures, compare_dirent_name_fields);
-}
+void mx_dirents_sort(t_list *dirent_structures) { 
+    mx_sort_list(dirent_structures, compare_dirent_name_fields); }
 
-void mx_dirents_print_both(t_list *dirent_structures) {
-    if (!dirent_structures) return;
-
+void mx_dirents_print_both(t_list *dirent_structures) { 
     mx_foreach_t_dirent_and_iterator(dirent_structures, mx_foreach_print_dirent);
 }
 
 void mx_dirents_print_table(t_list *dirents) {
-    if (!dirents) return;
-
     size_t parsed_len = 0;
     t_dirent **parsed = mx_dirents_parse_to_array(dirents, &parsed_len);
 
@@ -109,7 +102,6 @@ void mx_dirent_copy(t_dirent *dest, t_dirent *src) {
     mx_strcpy(dest->d_name, src->d_name);
 
     dest->d_ino = src->d_ino;
-    dest->d_off = src->d_off;
     dest->d_type = src->d_type;
     dest->d_reclen = src->d_reclen;
 }
@@ -287,16 +279,17 @@ void mx_dirents_print(int argc, char **argv) {
 
     t_list *dirent_structures = mx_dirents_get_from_main_input(argv, argc);
     t_list *files = mx_dirents_get_of_type(dirent_structures, DT_REG);
+    t_list *folders = mx_dirents_get_of_type(dirent_structures, DT_DIR);
 
     mx_dirents_sort(files);
-    mx_dirents_sort(dirent_structures);
+    mx_dirents_sort(folders);
 
+    mx_dirents_print_files(files);
 
-    mx_dirents_print_files(dirent_structures);
-
-    if (files) mx_printstr("\n\n");
-    mx_dirents_print_folders(dirent_structures);
+    if (files && folders != NULL) mx_printstr("\n\n");
+    mx_dirents_print_folders(folders);
 
     mx_dirents_free(files);
+    mx_dirents_free(folders);
     mx_dirents_free(dirent_structures);
 }
