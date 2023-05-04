@@ -183,14 +183,11 @@ void mx_dirent_infos_print(t_list *detailed_infos) {
     }
 }
 
-void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos) {
+void mx_dirent_infos_print_from_folder(t_list *detailed_infos) {
     if (!detailed_infos) {
-        mx_printstrc(folder->d_name, ':');
-        mx_printchar('\n');
-        mx_printstr("total 0\n");
         return;
     }
-    
+
     mx_print_total(detailed_infos);
 
     int max_digits_count = mx_get_max_digits_count(detailed_infos);

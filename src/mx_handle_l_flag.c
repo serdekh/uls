@@ -5,7 +5,9 @@ void mx_check_l_flag(int argc, char **argv) {
     if (!argv || argc <= 0) return;
 
     if (mx_check_flag_l_position(argc, argv)) return;
-    
+    else {
+        mx_printstr("suka\n");
+    }
     mx_dirents_print(argc, argv);
 
     exit(EXIT_SUCCESS);
@@ -48,11 +50,12 @@ void mx_handle_l_flag(t_list *dirents) {
         mx_dirent_info_fill(temp->d_name, folder_info);
 
         if (mx_strcmp(folder_info->permissions_string, NO_PERMISSIONS_STRING) == 0) {
-            #ifdef __APPLE__
+          //  #ifdef __APPLE__
+                if (files || (i != folders && !files)) mx_printchar('\n');
                 mx_dirent_info_free(folder_info);
                 mx_printstr(temp->d_name);
                 mx_printstr(":\n");
-            #endif
+          //  #endif
             mx_set_error_and_print(EACCES, temp->d_name, false);
             continue;
         }
@@ -76,15 +79,17 @@ void mx_handle_l_flag(t_list *dirents) {
 
         mx_dirent_infos_sort(folder_dirents_info);
   
+        if (!folder_dirents_info && files) mx_printchar('\n');
+
         if (list_size != 1) {
             if (mx_strcmp(temp->d_name, ((t_dirent *)folders->data)->d_name) != 0) {
                 mx_printchar('\n');
             }
             mx_printstr(temp->d_name);
-            mx_printstr(":\n");
+            mx_printstr(":\n");   
         }
 
-        mx_dirent_infos_print_from_folder(temp, folder_dirents_info);
+        mx_dirent_infos_print_from_folder(folder_dirents_info);
         mx_dirents_free(folder_dirents);
         mx_dirent_infos_free(folder_dirents_info);
     }

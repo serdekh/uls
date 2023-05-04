@@ -307,9 +307,9 @@ void mx_dirents_print(int argc, char **argv) {
     mx_dirents_sort(folders);
 
     mx_dirents_print_files(files);
-    mx_printchar('\n');
 
-    if (folders != NULL && files != NULL) mx_printstr("\n\n");
+    if (files && !folders) mx_printchar('\n');
+    else if (folders != NULL && files != NULL) mx_printstr("\n\n");
 
     mx_dirents_print_folders(folders, files);
     mx_dirents_free(files);

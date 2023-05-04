@@ -51,8 +51,11 @@ void mx_call_uls_with_params(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         t_dirent *dirent = mx_dirent_get(argv[i]);
 
-        if (dirent == NULL) continue; 
-
+        if (dirent == NULL) {
+            if (argv[i][0] == '-') continue;
+            mx_print_no_such_file_or_directory(argv[i], false);
+            continue; 
+        }
         mx_push_back(&main_input_dirents, dirent);  
     }
 
