@@ -17,8 +17,8 @@ t_dirent *mx_dirent_get(char *name) {
 
     char *directory = mx_remove_last_directory_move(name);
 
-    mx_try_opendir(&dir, directory);
-
+    mx_try_opendir(&dir, directory, false);
+    
     char *filename = mx_get_last_file_or_directory(name);
    
     free(directory);
@@ -50,7 +50,7 @@ t_list *mx_dirents_get(const char *name) {
     t_dirent *entry = NULL;
     t_list *dirent_structures = NULL;
 
-    mx_try_opendir(&dir, name);
+    mx_try_opendir(&dir, name, false);
 
     while ((entry = readdir(dir)) != NULL) {
         if (mx_is_hidden_file(entry->d_name)) continue;
@@ -167,8 +167,7 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *files) {
         mx_dirents_free(dirents_in_folder);
 
         if (i->next != NULL) {
-            if (isatty(1) != 0) mx_printstr("\n\n");
-            else mx_printstr("\n");
+            mx_printstr("\n");
         }
     }
 }
@@ -182,9 +181,8 @@ t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
         t_dirent *dirent = mx_dirent_get(argv[i]);
 
         if (dirent == NULL) {
-            mx_print_no_such_file_or_directory(argv[i]);
-            mx_dirents_free(dirent_structures);
-            exit(EXIT_FAILURE);
+            mx_print_no_such_file_or_directory(argv[i], false);
+            continue;
         }
 
         mx_push_back(&dirent_structures, dirent);

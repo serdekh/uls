@@ -2,24 +2,29 @@
 #include "../inc/uls_error.h"
 #include "../inc/libmx/inc/libmx.h"
 
-void mx_check_flag_l_position(int argc, char **argv) {
-    for (int i = 2; i < argc; i++) {
-        if (mx_strcmp(argv[i], "-l") == 0) {
-            mx_printerr(ULS_USAGE);
-            exit(EXIT_FAILURE);
-        }
+bool mx_check_flag_l_position(int argc, char **argv) {
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] != '-') continue;
+
+        if (argv[i][1] == 'l') return true;
+        
+        mx_print_invalid_option(argv[i]);
+        mx_printerr(ULS_USAGE);
+        exit(EXIT_FAILURE);
     }
+
+    return false;
 }
 
-void mx_print_invalid_option(char **argv) {
+void mx_print_invalid_option(char *flag) {
     mx_printerr("uls: illegal option -- ");
-    mx_printerr(&argv[1][1]); // &argv[1][1] -- a flag without '-' symbol
+    mx_printerr(&flag[1]); // &flag[1] -- a flag without '-' symbol
     mx_printerr("\n");
     mx_printerr(ULS_USAGE);
     exit(EXIT_FAILURE);
 }
 
-void mx_print_no_such_file_or_directory(char *file) {
+void mx_print_no_such_file_or_directory(char *file, bool exit_program) {
     if (!file) return;
     
     errno = ENOENT;
@@ -28,4 +33,5 @@ void mx_print_no_such_file_or_directory(char *file) {
     mx_printerr(": ");
     mx_printerr(strerror(errno));
     mx_printchar('\n');
+    if (exit_program) exit(EXIT_FAILURE);
 }

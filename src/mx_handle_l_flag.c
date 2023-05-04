@@ -4,11 +4,7 @@
 void mx_check_l_flag(int argc, char **argv) {
     if (!argv || argc <= 0) return;
 
-    mx_check_flag_l_position(argc, argv);
-
-    bool flag_l_found = mx_strcmp(argv[1], "-l") == 0;
-
-    if (flag_l_found) return;
+    if (mx_check_flag_l_position(argc, argv)) return;
     
     mx_dirents_print(argc, argv);
 

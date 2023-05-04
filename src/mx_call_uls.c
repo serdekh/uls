@@ -56,10 +56,12 @@ void mx_call_uls_with_params(int argc, char **argv) {
             continue;
         }
 
-        mx_print_no_such_file_or_directory(argv[i]);
-        mx_dirents_free(main_input_dirents);
+        if(argv[i][0] == '-') {
+            mx_dirents_free(main_input_dirents);
+            mx_print_invalid_option(argv[i]);
+        }
 
-        exit(EXIT_FAILURE);
+        mx_print_no_such_file_or_directory(argv[i], false);
     }
 
     mx_dirents_sort(main_input_dirents);
