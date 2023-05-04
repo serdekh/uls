@@ -27,4 +27,5 @@ void mx_print_no_such_file_or_directory(char *file) {
     mx_printerr(file);
     mx_printerr(": ");
     mx_printerr(strerror(errno));
+    mx_printchar('\n');
 }
