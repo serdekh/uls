@@ -21,7 +21,16 @@ void mx_dirent_infos_sort(t_list *detailed_infos) {
     mx_sort_list(detailed_infos, mx_compare_two_detailed_infos);
 }
 
-void mx_set_date(t_timespec *time, t_dirent_info *info) {
+void mx_set_date(
+    
+    #ifdef __APPLE__
+        time_t *time, 
+    #endif
+    #ifdef __linux__
+        t_timespec *time, 
+    #endif
+
+    t_dirent_info *info) {
     if (!time || !info) return;
 
     char *time_str = ctime(&time->tv_sec);
