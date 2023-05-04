@@ -62,7 +62,7 @@ void mx_foreach_print_dirent(t_dirent *temp, t_list *i) {
 }
 
 void mx_t_dirent_print_name_newline(t_dirent *temp) {
-    if (!mx_is_hidden_file(temp->d_name)) {
+    if (!mx_is_hidden_file(temp->d_name) && temp != NULL) {
         mx_printstrc(temp->d_name, '\n');
     }
 }

@@ -23,6 +23,8 @@ void mx_call_uls_without_params(char *path, bool exit_program) {
     mx_dirents_print_both(entries);
     mx_dirents_free(entries);
 
+    mx_printchar('\n');
+
     if (exit_program) exit(EXIT_SUCCESS);
 }
 

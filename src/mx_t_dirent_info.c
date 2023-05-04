@@ -38,10 +38,10 @@ void mx_set_date(
             time
         #endif
         #ifdef __linux__
-            time->tv_sec
+            &time->tv_sec
         #endif
     );
-    
+
     char **time_str_splitted = mx_strsplit(time_str, SPACE);
 
     int size = malloc_size(time_str_splitted) / sizeof(char **);
