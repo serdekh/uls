@@ -18,7 +18,12 @@ bool mx_check_flag_l_position(int argc, char **argv) {
 
 void mx_print_invalid_option(char *flag) {
     mx_printerr("uls: illegal option -- ");
-    mx_printerr(&flag[1]); // &flag[1] -- a flag without '-' symbol
+    #ifdef __APPLE__
+    mx_printerrn(&flag[1], 1);
+    #endif
+    #ifdef __linux__
+    mx_printerr(&flag[1]);
+    #endif
     mx_printerr("\n");
     mx_printerr(ULS_USAGE);
     exit(EXIT_FAILURE);

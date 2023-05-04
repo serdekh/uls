@@ -48,7 +48,11 @@ void mx_handle_l_flag(t_list *dirents) {
         mx_dirent_info_fill(temp->d_name, folder_info);
 
         if (mx_strcmp(folder_info->permissions_string, NO_PERMISSIONS_STRING) == 0) {
-            mx_dirent_info_free(folder_info);
+            #ifdef __APPLE__
+                mx_dirent_info_free(folder_info);
+                mx_printstr(temp->d_name);
+                mx_printstr(":\n");
+            #endif
             mx_set_error_and_print(EACCES, temp->d_name, false);
             continue;
         }
