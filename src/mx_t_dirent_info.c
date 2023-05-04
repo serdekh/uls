@@ -74,9 +74,16 @@ void mx_dirent_info_fill(char *filename, t_dirent_info *info) {
     info->owner_name = getpwuid(file_stat.st_uid)->pw_name;
     info->group_name = getgrgid(file_stat.st_gid)->gr_name;
 
-    t_timespec modification_time = file_stat.st_mtim;
-
-    mx_set_date(&modification_time, info);
+    #ifdef __APPLE__
+        time_t modification_time;
+        modification_time = file_stat.st_mtime;
+        mx_set_date(&modification_time, info);
+    #endif
+    #ifdef __linux__
+        t_timespec modification_time;
+        modification_time = file_stat.st_mtim;
+        mx_set_date(&modification_time, info);
+    #endif
 
     info->file_name  = mx_get_last_file_or_directory(filename);
     info->size       = (int)file_stat.st_size;
