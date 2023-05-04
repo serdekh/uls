@@ -33,7 +33,15 @@ void mx_set_date(
     t_dirent_info *info) {
     if (!time || !info) return;
 
-    char *time_str = ctime(&time->tv_sec);
+    char *time_str = ctime(
+        #ifdef __APPLE__
+            time
+        #endif
+        #ifdef __linux__
+            time->tv_sec
+        #endif
+    );
+    
     char **time_str_splitted = mx_strsplit(time_str, SPACE);
 
     int size = malloc_size(time_str_splitted) / sizeof(char **);
