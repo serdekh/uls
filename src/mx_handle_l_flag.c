@@ -5,9 +5,7 @@ void mx_check_l_flag(int argc, char **argv) {
     if (!argv || argc <= 0) return;
 
     if (mx_check_flag_l_position(argc, argv)) return;
-    else {
-        mx_printstr("suka\n");
-    }
+
     mx_dirents_print(argc, argv);
 
     exit(EXIT_SUCCESS);
