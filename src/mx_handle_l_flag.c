@@ -44,6 +44,18 @@ void mx_handle_l_flag(t_list *dirents) {
     for (t_list *i = folders; i != NULL; i = i->next) {
         t_dirent *temp = (t_dirent *)(i->data);
 
+        t_dirent_info *folder_info = mx_dirent_info_new();
+        mx_dirent_info_fill(temp->d_name, folder_info);
+
+        if (mx_strcmp(folder_info->permissions_string, NO_PERMISSIONS_STRING) == 0) {
+            mx_dirent_info_free(folder_info);
+            mx_set_error_and_print(EACCES, temp->d_name, false);
+            continue;
+        }
+
+        mx_dirent_info_free(folder_info);
+
+
         t_list *folder_dirents = mx_dirents_get(temp->d_name);
         t_list *folder_dirents_info = NULL;
 

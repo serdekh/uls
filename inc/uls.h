@@ -15,6 +15,7 @@
 #define SPACE ' '
 #define FLAG_CHAR '-'
 #define CURRENT_DIRECTORY "."
+#define NO_PERMISSIONS_STRING "d---------"
 
 typedef struct stat t_stat;
 typedef struct passwd t_passwd;

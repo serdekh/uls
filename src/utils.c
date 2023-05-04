@@ -84,3 +84,12 @@ t_winsize mx_get_winsize() {
 
     return window_size;
 }
+
+bool mx_doesnt_have_permissions(t_dirent_info *dirent_info) {
+    return (
+        mx_strcmp(
+            dirent_info->permissions_string, 
+            NO_PERMISSIONS_STRING
+        ) == 0
+    );
+}

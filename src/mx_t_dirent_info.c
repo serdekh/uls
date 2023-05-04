@@ -125,20 +125,39 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
 
 void mx_dirent_info_print(t_dirent_info info, int spaces) {
     mx_printstrc(info.permissions_string, SPACE);
+
+    #ifdef __APPLE__
+        mx_printchar(SPACE);
+        spaces++;
+    #endif
     
     mx_printint(info.hard_links);
     mx_printchar(SPACE);
 
     mx_printstrc(info.owner_name, SPACE);
+
+    #ifdef __APPLE__
+        mx_printchar(SPACE);
+    #endif
+
     mx_printstrc(info.group_name, SPACE);
 
     for (int i = 0; i < spaces; i++) { mx_printchar(SPACE); }
-
     mx_printint(info.size);
     mx_printchar(SPACE);
-    mx_printstrc(info.month, SPACE);
-    if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
-    mx_printstrc(info.day, SPACE);
+
+    #ifdef __linux__
+        mx_printstrc(info.month, SPACE);
+        if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
+        mx_printstrc(info.day, SPACE);
+    #endif
+    #ifdef __APPLE__ 
+        mx_printchar(SPACE);
+        if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
+        mx_printstrc(info.day, SPACE);
+        mx_printstrc(info.month, SPACE);
+    #endif
+
     mx_printstrc(info.time, SPACE);
     mx_printstrc(info.file_name, '\n');
 }
@@ -166,8 +185,9 @@ void mx_dirent_infos_print(t_list *detailed_infos) {
 
 void mx_dirent_infos_print_from_folder(t_dirent *folder, t_list *detailed_infos) {
     if (!detailed_infos) {
-        mx_printstr(folder->d_name);
-        mx_printstr(":\t# empty directory\n");
+        mx_printstrc(folder->d_name, ':');
+        mx_printchar('\n');
+        mx_printstr("total 0\n");
         return;
     }
     

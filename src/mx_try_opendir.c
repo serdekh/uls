@@ -9,9 +9,9 @@ void mx_try_opendir(DIR **dir, const char *name, bool exit_program) {
     if (*dir != NULL) return;
 
     char *error = strerror(errno);
-    mx_printerr("uls: '");
+    mx_printerr("uls: ");
     mx_printerr(name);
-    mx_printerr("': ");
+    mx_printerr(": ");
     mx_printerr(error);
     if (exit_program) exit(EXIT_FAILURE);
 }
