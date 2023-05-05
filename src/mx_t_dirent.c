@@ -141,7 +141,7 @@ void mx_dirents_print_from_folder(t_dirent *folder) {
 void mx_dirents_print_folders(t_list *dirent_structures) {
     if (!dirent_structures) return;
 
-    int dirents_size = mx_get_size_without_non_permission_folders(dirent_structures);
+    int dirents_size = mx_list_size(dirent_structures);
 
     for (t_list *i = dirent_structures; i != NULL; i = i->next) {
         t_dirent *folder = (t_dirent *)(i->data);

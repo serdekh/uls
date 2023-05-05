@@ -60,7 +60,8 @@ void mx_handle_l_flag(t_list *dirents) {
             mx_printstr(temp->d_name);
             mx_printstr(":\n");
  
-            mx_set_error_and_print(EACCES, temp->d_name, false, true);
+            if (i->next != NULL) mx_set_error_and_print(EACCES, temp->d_name, false, true);
+            else mx_set_error_and_print(EACCES, temp->d_name, false, false);
             continue;
         }
 

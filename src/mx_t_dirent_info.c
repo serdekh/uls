@@ -188,7 +188,7 @@ bool mx_dirent_infos_print(t_list *detailed_infos) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
         mx_dirent_info_print(*temp, max_digits_count - 
             mx_get_digits_count(temp->size), 
-            mx_get_digits_count(temp->hard_links) - hard_links_spaces
+            hard_links_spaces - mx_get_digits_count(temp->hard_links)
         );
 
         if (!mx_doesnt_have_permissions(temp) && !printed) printed = true;
@@ -212,7 +212,7 @@ void mx_dirent_infos_print_from_folder(t_list *detailed_infos) {
 
         mx_dirent_info_print(*temp, max_digits_count - 
             mx_get_digits_count(temp->size), 
-            mx_get_digits_count(temp->hard_links) - hard_links_spaces
+            hard_links_spaces - mx_get_digits_count(temp->hard_links)
         );
     }
 }
