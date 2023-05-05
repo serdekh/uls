@@ -126,7 +126,7 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
 void mx_dirent_info_print(t_dirent_info info, int spaces, int hard_link_spaces) {
     mx_printstrc(info.permissions_string, SPACE);
     mx_printchar(SPACE);
-    
+
     spaces++;
 
     for (int i = 0; i < hard_link_spaces - 1; i++) { mx_printchar(SPACE); }
@@ -165,8 +165,11 @@ int mx_get_hard_links_max_digits_count(t_list *detailed_infos) {
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
-        if (mx_count_digits(temp->hard_links) > hard_links_spaces) {
-            hard_links_spaces = temp->hard_links;
+
+        int hard_link_digits = mx_count_digits(temp->hard_links);
+
+        if (hard_link_digits > hard_links_spaces) {
+            hard_links_spaces = hard_link_digits;
         }
     }
 
