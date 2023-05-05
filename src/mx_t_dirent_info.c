@@ -146,17 +146,12 @@ void mx_dirent_info_print(t_dirent_info info, int spaces) {
     mx_printint(info.size);
     mx_printchar(SPACE);
 
-    #ifdef __linux__
-        mx_printstrc(info.month, SPACE);
-        if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
-        mx_printstrc(info.day, SPACE);
-    #endif
-    #ifdef __APPLE__ 
-        mx_printchar(SPACE);
-        if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
-        mx_printstrc(info.day, SPACE);
-        mx_printstrc(info.month, SPACE);
-    #endif
+  
+    mx_printchar(SPACE);
+    if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
+    mx_printstrc(info.day, SPACE);
+    mx_printstrc(info.month, SPACE);
+
 
     mx_printstrc(info.time, SPACE);
     mx_printstrc(info.file_name, '\n');
@@ -222,7 +217,12 @@ void mx_print_total(t_list *detailed_infos) {
     }
 
     mx_printstr("total ");
+    #ifdef __APPLE__
+    mx_printint(total);
+    #endif
+     #ifdef __linux__
     mx_printint(total / 2);
+    #endif
     mx_printchar('\n');
 }
 

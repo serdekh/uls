@@ -4,7 +4,7 @@
 
 bool mx_check_flag_l_position(int argc, char **argv) {
     if (argc){}
-    
+
     if (argv[1][0] == '-' && mx_strcmp(argv[1], "-l") != 0) {
         mx_print_invalid_option(argv[1]);
         mx_printerr(ULS_USAGE);
@@ -35,7 +35,7 @@ void mx_print_no_such_file_or_directory(char *file, bool exit_program) {
     mx_printerr(file);
     mx_printerr(": ");
     mx_printerr(strerror(errno));
-    mx_printchar('\n');
+    mx_printerr("\n");
     if (exit_program) exit(EXIT_FAILURE);
 }
 
