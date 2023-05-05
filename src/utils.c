@@ -93,3 +93,7 @@ bool mx_doesnt_have_permissions(t_dirent_info *dirent_info) {
         ) == 0
     );
 }
+
+void mx_newline() {
+    mx_printchar('\n');
+}

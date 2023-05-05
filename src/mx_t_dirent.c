@@ -149,11 +149,13 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *files) {
         t_dirent_info *folder_info = mx_dirent_info_new();
         mx_dirent_info_fill(folder->d_name, folder_info);
 
-        if (mx_strcmp(folder_info->permissions_string, NO_PERMISSIONS_STRING) == 0) {
+        if (mx_doesnt_have_permissions(folder_info)) {
             mx_dirent_info_free(folder_info);
+            mx_printstr(folder->d_name);
+            mx_printstr(":\n");
             mx_set_error_and_print(EACCES, folder->d_name, false);
 
-            if (i->next != NULL) mx_printchar('\n');
+            if (i->next != NULL) mx_newline();
             continue;
         }
 
@@ -169,7 +171,7 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *files) {
         t_list *dirents_in_folder = mx_dirents_get(folder->d_name);
 
         if (!dirents_in_folder && i->next != NULL) {
-            mx_printchar('\n');
+            mx_newline();
             continue;
         }
 
@@ -184,11 +186,11 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *files) {
         mx_dirents_free(dirents_in_folder);
 
         if (i->next != NULL) {
-            mx_printstr("\n");
+            mx_newline();
         }
     }
 
-    mx_printchar('\n');
+    mx_newline();
 }
 
 t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
@@ -226,7 +228,7 @@ void mx_dirents_print_of_type(t_list *dirents, unsigned char type_printed) {
             }
         }
         else {
-            mx_printchar('\n');
+            mx_newline();
         }
     }
 }
@@ -312,7 +314,7 @@ void mx_dirents_print(int argc, char **argv) {
 
     mx_dirents_print_files(files);
 
-    if (files && !folders) mx_printchar('\n');
+    if (files && !folders) mx_newline();
     if (folders && files)  mx_printstr("\n\n");
 
     mx_dirents_print_folders(folders, files);

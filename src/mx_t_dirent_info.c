@@ -125,7 +125,6 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
 
 void mx_dirent_info_print(t_dirent_info info, int spaces, int hard_link_spaces) {
     mx_printstrc(info.permissions_string, SPACE);
-    mx_printchar(SPACE);
 
     spaces++;
 

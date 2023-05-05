@@ -8,3 +8,4 @@ char *mx_remove_last_directory_move(char *path);
 char *mx_get_last_file_or_directory(char *path);
 
 bool mx_doesnt_have_permissions(t_dirent_info *dirent_info);
+void mx_newline();

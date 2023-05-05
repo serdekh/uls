@@ -47,6 +47,6 @@ void mx_set_error_and_print(int errno_value, char *file, bool exit_program) {
     mx_printerr(file);
     mx_printerr(": ");
     mx_printerr(strerror(errno));
-    mx_printchar('\n');
+    mx_printerr("\n");
     if (exit_program) exit(EXIT_FAILURE);
 }
