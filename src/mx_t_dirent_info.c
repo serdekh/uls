@@ -123,22 +123,22 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
     return max;
 }
 
-void mx_dirent_info_print(t_dirent_info info, int spaces) {
+void mx_dirent_info_print(t_dirent_info info, int spaces, int hard_link_spaces) {
     mx_printstrc(info.permissions_string, SPACE);
 
-    #ifdef __APPLE__
-        mx_printchar(SPACE);
-        spaces++;
-    #endif
-    
+ 
+    mx_printchar(SPACE);
+    spaces++;
+
+    for (int i = 0; i < hard_link_spaces - 1; i++) { mx_printchar(SPACE); }
     mx_printint(info.hard_links);
     mx_printchar(SPACE);
 
     mx_printstrc(info.owner_name, SPACE);
 
-    #ifdef __APPLE__
+    //epl
         mx_printchar(SPACE);
-    #endif
+
 
     mx_printstrc(info.group_name, SPACE);
 
@@ -146,11 +146,9 @@ void mx_dirent_info_print(t_dirent_info info, int spaces) {
     mx_printint(info.size);
     mx_printchar(SPACE);
 
-  
-    mx_printchar(SPACE);
+    mx_printstrc(info.month, SPACE);
     if (mx_strlen(info.day) == 1) mx_printchar(SPACE);
     mx_printstrc(info.day, SPACE);
-    mx_printstrc(info.month, SPACE);
 
 
     mx_printstrc(info.time, SPACE);
@@ -171,10 +169,18 @@ void mx_dirent_infos_print(t_list *detailed_infos) {
     if (!detailed_infos) return;
 
     int max_digits_count = mx_get_max_digits_count(detailed_infos);
+    int hard_links_spaces = 0;
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
-        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size));
+        if (mx_count_digits(temp->hard_links) > hard_links_spaces) {
+            hard_links_spaces = temp->hard_links;
+        }
+    }
+
+    for (t_list *i = detailed_infos; i != NULL; i = i->next) {
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
+        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size), hard_links_spaces);
     }
 }
 
@@ -186,11 +192,19 @@ void mx_dirent_infos_print_from_folder(t_list *detailed_infos) {
     mx_print_total(detailed_infos);
 
     int max_digits_count = mx_get_max_digits_count(detailed_infos);
+    int hard_links_spaces = 0;
+
+    for (t_list *i = detailed_infos; i != NULL; i = i->next) {
+        t_dirent_info *temp = (t_dirent_info *)(i->data);
+        if (mx_count_digits(temp->hard_links) > hard_links_spaces) {
+            hard_links_spaces = temp->hard_links;
+        }
+    }
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
 
-        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size));
+        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size), hard_links_spaces);
     }
 }
 
