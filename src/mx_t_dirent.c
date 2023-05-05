@@ -187,6 +187,8 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *files) {
             mx_printstr("\n");
         }
     }
+
+    mx_printchar('\n');
 }
 
 t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
