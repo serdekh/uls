@@ -194,6 +194,8 @@ t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
 
     t_list *dirent_structures = NULL;
 
+    mx_bubble_sort(&argv[1], argc - 1);
+
     for (int i = 1; i < argc; i++) {
         t_dirent *dirent = mx_dirent_get(argv[i]);
 
@@ -308,8 +310,8 @@ void mx_dirents_print(int argc, char **argv) {
 
     mx_dirents_print_files(files);
 
-    if (files && !folders) mx_printchar('\n');
-    else if (folders != NULL && files != NULL) mx_printstr("\n\n");
+    //if (files && !folders) mx_printchar('\n');
+     if (folders != NULL && files != NULL) mx_printstr("\n\n");
 
     mx_dirents_print_folders(folders, files);
     mx_dirents_free(files);

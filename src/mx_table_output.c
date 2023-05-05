@@ -30,7 +30,7 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
 
             if (i != size - 1) mx_printstr("  ");
         }
-
+        mx_printchar('\n');
         return;
     }
 

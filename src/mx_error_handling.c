@@ -3,22 +3,15 @@
 #include "../inc/libmx/inc/libmx.h"
 
 bool mx_check_flag_l_position(int argc, char **argv) {
-    bool result = false;
-
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] != '-') continue;
-
-        if (argv[i][1] == 'l') { 
-            result = true;
-            continue;
-        }
-        
-        mx_print_invalid_option(argv[i]);
+    if (argc){}
+    
+    if (argv[1][0] == '-' && mx_strcmp(argv[1], "-l") != 0) {
+        mx_print_invalid_option(argv[1]);
         mx_printerr(ULS_USAGE);
         exit(EXIT_FAILURE);
     }
 
-    return result;
+    return true;
 }
 
 void mx_print_invalid_option(char *flag) {
