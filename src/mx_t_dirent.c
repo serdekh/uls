@@ -138,10 +138,10 @@ void mx_dirents_print_from_folder(t_dirent *folder) {
     mx_dirents_free(dirent_structures_in_folder);
 }
 
-void mx_dirents_print_folders(t_list *dirent_structures) {
+void mx_dirents_print_folders(t_list *dirent_structures, t_list *all) {
     if (!dirent_structures) return;
 
-    int dirents_size = mx_list_size(dirent_structures);
+    int dirents_size = mx_list_size(all);
 
     for (t_list *i = dirent_structures; i != NULL; i = i->next) {
         t_dirent *folder = (t_dirent *)(i->data);
@@ -163,7 +163,7 @@ void mx_dirents_print_folders(t_list *dirent_structures) {
 
         if (folder->d_type != DT_DIR) continue;
 
-        if (dirents_size != 1) {
+        if (dirents_size > 1) {
             mx_printstr(folder->d_name);
             mx_printstr(":\n");
         }
@@ -190,7 +190,8 @@ void mx_dirents_print_folders(t_list *dirent_structures) {
         }
     }
 
-    mx_newline();
+
+    if (isatty(1)) mx_newline();
 }
 
 t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
@@ -228,7 +229,9 @@ void mx_dirents_print_of_type(t_list *dirents, unsigned char type_printed) {
             }
         }
         else {
-            mx_newline();
+            if (i->next != NULL) {
+                mx_newline();
+            }
         }
     }
 }
@@ -317,7 +320,7 @@ void mx_dirents_print(int argc, char **argv) {
     if (files && !folders) mx_newline();
     if (folders && files)  mx_printstr("\n\n");
 
-    mx_dirents_print_folders(folders);
+    mx_dirents_print_folders(folders, dirent_structures);
     mx_dirents_free(files);
     mx_dirents_free(folders);
     mx_dirents_free(dirent_structures);
