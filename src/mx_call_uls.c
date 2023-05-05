@@ -42,13 +42,13 @@ void mx_call_uls_l() {
 }
 
 void mx_validate_args(int argc, char **argv) {
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-' && mx_strcmp(argv[i], "-l") != 0) {
-            mx_print_invalid_option(argv[i]);
-            exit(EXIT_FAILURE);
-        }
-    }
+    
     if (mx_strcmp(argv[1], "-l") == 0) return;
+
+    if (argv[1][0] == '-' && mx_strcmp(argv[1], "-l")) {
+        mx_print_invalid_option(argv[1]);
+        exit(EXIT_FAILURE);
+    }
 
     mx_dirents_print(argc, argv);
 
@@ -66,8 +66,7 @@ void mx_call_uls_with_params(int argc, char **argv) {
         t_dirent *dirent = mx_dirent_get(argv[i]);
 
         if (dirent == NULL) {
-            if (argv[i][0] == '-') continue;
-            mx_print_no_such_file_or_directory(argv[i], false);
+            if (argv[i][0] == '-' && i > 1) mx_print_no_such_file_or_directory(argv[i], false);
             continue; 
         }
         mx_push_back(&main_input_dirents, dirent);  
