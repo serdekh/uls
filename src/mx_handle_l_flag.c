@@ -41,6 +41,8 @@ void mx_handle_l_flag(t_list *dirents) {
 
     int list_size = mx_list_size(folders);
 
+    if (files && folders) mx_printchar('\n');
+
     for (t_list *i = folders; i != NULL; i = i->next) {
         t_dirent *temp = (t_dirent *)(i->data);
 
