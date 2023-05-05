@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/utils.h"
 #include "../inc/uls_error.h"
 
 void mx_check_l_flag(int argc, char **argv) {
@@ -17,6 +18,8 @@ void mx_handle_l_flag(t_list *dirents) {
     t_list *files   = NULL;
     t_list *folders = NULL;
 
+    bool files_were_printed = false;
+
     for (t_list *t = dirents; t != NULL; t = t->next) {
         t_dirent *temp = (t_dirent *)(t->data);
 
@@ -34,14 +37,16 @@ void mx_handle_l_flag(t_list *dirents) {
     }
 
     mx_dirent_infos_sort(files);
-    mx_dirent_infos_print(files);
+
+    files_were_printed = mx_dirent_infos_print(files);
+
     mx_dirent_infos_free(files);
 
     mx_dirents_sort(folders);
 
     int list_size = mx_list_size(folders);
 
-    if (files && folders) mx_printchar('\n');
+    if (files_were_printed && folders) mx_printchar('\n');
 
     for (t_list *i = folders; i != NULL; i = i->next) {
         t_dirent *temp = (t_dirent *)(i->data);
@@ -49,14 +54,13 @@ void mx_handle_l_flag(t_list *dirents) {
         t_dirent_info *folder_info = mx_dirent_info_new();
         mx_dirent_info_fill(temp->d_name, folder_info);
 
-        if (mx_strcmp(folder_info->permissions_string, NO_PERMISSIONS_STRING) == 0) {
- 
-            if (files || (i != folders && !files)) mx_printchar('\n');
+        if (mx_doesnt_have_permissions(folder_info)) {
+            if (i != folders) mx_newline();
             mx_dirent_info_free(folder_info);
             mx_printstr(temp->d_name);
             mx_printstr(":\n");
  
-            mx_set_error_and_print(EACCES, temp->d_name, false);
+            mx_set_error_and_print(EACCES, temp->d_name, false, true);
             continue;
         }
 

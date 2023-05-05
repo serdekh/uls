@@ -65,14 +65,14 @@ void mx_dirents_sort(t_list *dirent_structures);
 void mx_dirents_print_from_folder(t_dirent *folder); 
 void mx_dirents_free(t_list *dirent_structures_list); 
 void mx_dirents_print_both(t_list *dirent_structures); 
-void mx_dirents_print_folders(t_list *dirent_structures, t_list *files);
+void mx_dirents_print_folders(t_list *dirent_structures);
 
 void mx_dirent_info_free(t_dirent_info *info); 
 void mx_dirent_info_fill(char *filename, t_dirent_info *info); 
 
 void mx_dirent_infos_sort(t_list *detailed_infos); 
 void mx_dirent_infos_free(t_list *detailed_infos); 
-void mx_dirent_infos_print(t_list *detailed_infos); 
+bool mx_dirent_infos_print(t_list *detailed_infos); 
 void mx_dirent_infos_print_from_folder(t_list *detailed_infos);
 
 t_list *mx_dirents_get(const char *name); 

@@ -1,4 +1,5 @@
 #include "../inc/uls.h"
+#include "../inc/utils.h"
 #include "../inc/uls_error.h"
 
 t_dirent_info *mx_dirent_info_new() {
@@ -125,10 +126,10 @@ int mx_get_max_digits_count(t_list *detailed_infos) {
 
 void mx_dirent_info_print(t_dirent_info info, int spaces, int hard_link_spaces) {
     mx_printstrc(info.permissions_string, SPACE);
-
+    mx_printchar(SPACE);
     spaces++;
 
-    for (int i = 0; i < hard_link_spaces - 1; i++) { mx_printchar(SPACE); }
+    for (int i = 0; i < hard_link_spaces; i++) { mx_printchar(SPACE); }
 
     mx_printint(info.hard_links);
     mx_printchar(SPACE);
@@ -175,16 +176,25 @@ int mx_get_hard_links_max_digits_count(t_list *detailed_infos) {
     return hard_links_spaces;
 }
 
-void mx_dirent_infos_print(t_list *detailed_infos) {
-    if (!detailed_infos) return;
+bool mx_dirent_infos_print(t_list *detailed_infos) {
+    if (!detailed_infos) return false;
+
+    bool printed = false;
 
     int max_digits_count = mx_get_max_digits_count(detailed_infos);
     int hard_links_spaces = mx_get_hard_links_max_digits_count(detailed_infos);
 
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
-        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size), hard_links_spaces);
+        mx_dirent_info_print(*temp, max_digits_count - 
+            mx_get_digits_count(temp->size), 
+            mx_get_digits_count(temp->hard_links) - hard_links_spaces
+        );
+
+        if (!mx_doesnt_have_permissions(temp) && !printed) printed = true;
     }
+
+    return printed;
 }
 
 void mx_dirent_infos_print_from_folder(t_list *detailed_infos) {
@@ -200,7 +210,10 @@ void mx_dirent_infos_print_from_folder(t_list *detailed_infos) {
     for (t_list *i = detailed_infos; i != NULL; i = i->next) {
         t_dirent_info *temp = (t_dirent_info *)(i->data);
 
-        mx_dirent_info_print(*temp, max_digits_count - mx_get_digits_count(temp->size), hard_links_spaces);
+        mx_dirent_info_print(*temp, max_digits_count - 
+            mx_get_digits_count(temp->size), 
+            mx_get_digits_count(temp->hard_links) - hard_links_spaces
+        );
     }
 }
 

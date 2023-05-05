@@ -97,3 +97,21 @@ bool mx_doesnt_have_permissions(t_dirent_info *dirent_info) {
 void mx_newline() {
     mx_printchar('\n');
 }
+
+int mx_get_size_without_non_permission_folders(t_list *folders) {
+    int size = 0;
+
+    for (t_list *i = folders; i != NULL; i = i->next) {
+        t_dirent *temp = (t_dirent *)(i->data);
+        t_dirent_info *folder = mx_dirent_info_new();
+        mx_dirent_info_fill(temp->d_name, folder);
+
+        if (!mx_doesnt_have_permissions(folder)) {
+            size++;
+        }
+
+        mx_dirent_info_free(folder);
+    }
+
+    return size;
+}
