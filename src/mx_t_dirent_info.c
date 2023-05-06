@@ -84,9 +84,11 @@ void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode) {
     #endif /* __APPLE__ */
     if (has_xattr) {
         info->permissions_string[10] = '@';
+        info->permissions_string[11] = '\0';
     #ifdef __APPLE__
     } else if (has_acl) {
         info->permissions_string[10] = '+';
+        info->permissions_string[11] = '\0';
     #endif /* __APPLE__ */
     } else {
         info->permissions_string[10] = '\0';

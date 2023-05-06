@@ -29,7 +29,7 @@ typedef struct winsize t_winsize;
 typedef struct timespec t_timespec;
 
 typedef struct s_dirent_info {
-    char permissions_string[11];
+    char permissions_string[12];
     char *owner_name;
     char *group_name;
     char *month;

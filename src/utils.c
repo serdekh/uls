@@ -87,9 +87,10 @@ t_winsize mx_get_winsize() {
 
 bool mx_doesnt_have_permissions(t_dirent_info *dirent_info) {
     return (
-        mx_strcmp(
+        mx_strncmp(
             dirent_info->permissions_string, 
-            NO_PERMISSIONS_STRING
+            NO_PERMISSIONS_STRING,
+            strlen(NO_PERMISSIONS_STRING)
         ) == 0
     );
 }
