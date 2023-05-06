@@ -150,8 +150,12 @@ void mx_dirents_print_folders(t_list *dirent_structures, int argc) {
 
         if (mx_doesnt_have_permissions(folder_info)) {
             mx_dirent_info_free(folder_info);
-            mx_printstr(folder->d_name);
-            mx_printstr(":\n");
+            
+            if (argc > 2) { 
+                mx_printstr(folder->d_name);
+                mx_printstr(":\n");
+            }
+
             mx_set_error_and_print(EACCES, folder->d_name, false, true);
 
             if (i->next != NULL) mx_newline();
