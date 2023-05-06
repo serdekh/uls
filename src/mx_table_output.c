@@ -4,10 +4,10 @@
 void add_tabs(int max_size, int size) {
     if ((max_size - size) % 8 == 0) mx_printchar('\t');
 
-    // while ((max_size - size) > 8) {
-    //     mx_printchar('\t');
-    //     size += 8 - (size % 8);
-    // }
+    while ((max_size - size) > 8) {
+        mx_printchar('\t');
+        size += 8 - (size % 8);
+    }
 }
 
 void mx_replace_carriages(char *str, char with) {
@@ -20,7 +20,7 @@ void mx_replace_carriages(char *str, char with) {
     }
 }
 
-void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list *current) {
+bool true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list *current) {
     int cols = max_size / (max_d_len);
     int rows = (size % cols) ? size / cols + 1 : size / cols;
 
@@ -31,10 +31,9 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list 
             if (i != size - 1) mx_printstr("  ");
         }
 
-        if (current->next == NULL){}
-        mx_newline();
+        if (current->next != NULL) mx_newline();
 
-        return;
+        return true;
     }
 
     for (int i = 0; i < rows; i++) {
@@ -60,6 +59,8 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list 
             add_tabs(max_d_len, kth_dirent_len);
         }
     }
+    if (current->next != NULL) mx_newline();
+    return false;
 }
 
 void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len, t_list *current) {
@@ -71,8 +72,7 @@ void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len, 
         }
     }
     else {
-        true_mul(max_size, max_d_len, dirents, (int)size, current);
-        if (current->next) mx_newline();
+        if (true_mul(max_size, max_d_len, dirents, (int)size, current)) mx_newline();
     }
 }
 
