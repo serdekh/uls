@@ -11,6 +11,10 @@
 #include <sys/xattr.h>
 #include <sys/ioctl.h>
 
+#ifdef __APPLE__
+    #include <sys/acl.h>
+#endif
+
 #include "../inc/libmx/inc/libmx.h"
 
 #define SPACE ' '
