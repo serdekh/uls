@@ -44,7 +44,7 @@ void mx_handle_l_flag(t_list *dirents) {
 
     mx_dirents_sort(folders);
 
-    int list_size = mx_list_size(folders);
+    int list_size = mx_list_size(dirents);
 
     if (files_were_printed && folders) mx_printchar('\n');
 

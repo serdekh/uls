@@ -98,7 +98,7 @@ void mx_print_total(t_list *detailed_infos);
 
 
 
-void mx_print_table(t_dirent **dirents, size_t size);
+void mx_print_table(t_dirent **dirents, size_t size, t_list *current_folder);
 
 
 

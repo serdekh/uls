@@ -85,13 +85,13 @@ void mx_dirents_print_both(t_list *dirent_structures) {
     mx_foreach_t_dirent_and_iterator(dirent_structures, mx_foreach_print_dirent);
 }
 
-void mx_dirents_print_table(t_list *dirents) {
+void mx_dirents_print_table(t_list *dirents, t_list *current_folder) {
     size_t parsed_len = 0;
     t_dirent **parsed = mx_dirents_parse_to_array(dirents, &parsed_len);
 
     if (!parsed) return;
 
-    mx_print_table(parsed, parsed_len);
+    mx_print_table(parsed, parsed_len, current_folder);
 
     for (size_t i = 0; i < parsed_len; i++) {
         free(parsed[i]);
@@ -177,16 +177,13 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *all) {
 
         mx_dirents_sort(dirents_in_folder);
 
-        isatty(STDOUT_FILENO)
-            ? mx_dirents_print_table(dirents_in_folder)
-            : mx_foreach_t_dirent(dirents_in_folder, mx_t_dirent_print_name_newline);
+        if (isatty(STDOUT_FILENO)) {
+            mx_dirents_print_table(dirents_in_folder, i);
+        }
+        else mx_foreach_t_dirent(dirents_in_folder, mx_t_dirent_print_name_newline);
         
         mx_dirents_free(dirents_in_folder);
-
-        if (i->next != NULL) mx_newline();
     }
-
-    if (isatty(1)) mx_newline();
 }
 
 t_list *mx_dirents_get_from_main_input(char **argv, int argc) {
