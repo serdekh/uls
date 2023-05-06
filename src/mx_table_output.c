@@ -72,7 +72,7 @@ void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len, 
     }
     else {
         true_mul(max_size, max_d_len, dirents, (int)size, current);
-        mx_newline();
+        if (current->next) mx_newline();
     }
 }
 
