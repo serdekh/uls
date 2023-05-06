@@ -57,7 +57,7 @@ void mx_handle_l_flag(t_list *dirents, int argc) {
         if (mx_doesnt_have_permissions(folder_info)) {
             mx_dirent_info_free(folder_info);
             
-            if (argc >= 2) { 
+            if (argc > 3) { 
                 mx_printstr(temp->d_name);
                 mx_printstr(":\n");
             }
