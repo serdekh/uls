@@ -58,7 +58,7 @@ void mx_set_date(
     free(time_str_splitted);
 }
 
-void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode) {
+void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode, char *path) {
     if (!info) return;
 
     info->permissions_string[0] = (S_ISDIR(file_mode)) ? 'd' : '-';
@@ -72,25 +72,33 @@ void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode) {
     info->permissions_string[8] = (file_mode & S_IWOTH) ? 'w' : '-';
     info->permissions_string[9] = (file_mode & S_IXOTH) ? 'x' : '-';
 
+    bool has_xattr = false;
+
     #ifdef __APPLE__
     char buf[10000];
-    bool has_xattr = listxattr(info->file_name, buf, 10000, XATTR_NOFOLLOW) > 0;
+    has_xattr = listxattr(path, buf, 10000, XATTR_NOFOLLOW) > 0;
     #endif /* __APPLE__ */
+
     #ifdef __linux__
-        bool has_xattr = listxattr(info->file_name, NULL, 1000) > 0;
+    has_xattr = listxattr(path, NULL, 1000) > 0;
     #endif /* __linux__ */
+
     #ifdef __APPLE__
-        bool has_acl = acl_get_file(info->file_name, ACL_TYPE_EXTENDED);
+        bool has_acl = acl_get_file(path, ACL_TYPE_EXTENDED);
     #endif /* __APPLE__ */
+
     if (has_xattr) {
         info->permissions_string[10] = '@';
         info->permissions_string[11] = '\0';
+        
     #ifdef __APPLE__
-    } else if (has_acl) {
-        info->permissions_string[10] = '+';
-        info->permissions_string[11] = '\0';
+    } 
+    else if (has_acl) {
+            info->permissions_string[10] = '+';
+            info->permissions_string[11] = '\0';
     #endif /* __APPLE__ */
-    } else {
+    } 
+    else {
         info->permissions_string[10] = '\0';
     }
 }
@@ -108,7 +116,7 @@ void mx_dirent_info_fill(char *filename, t_dirent_info *info) {
         exit(EXIT_FAILURE);
     }
 
-    mx_set_permissions_string(info, file_stat.st_mode);
+    mx_set_permissions_string(info, file_stat.st_mode, filename);
 
     info->owner_name = getpwuid(file_stat.st_uid)->pw_name;
     info->group_name = getgrgid(file_stat.st_gid)->gr_name;
