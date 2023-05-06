@@ -20,7 +20,7 @@ void mx_replace_carriages(char *str, char with) {
     }
 }
 
-void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
+void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list *current) {
     int cols = max_size / (max_d_len);
     int rows = (size % cols) ? size / cols + 1 : size / cols;
 
@@ -30,6 +30,8 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
 
             if (i != size - 1) mx_printstr("  ");
         }
+
+        if (current->next == NULL) mx_newline();
 
         return;
     }
@@ -59,7 +61,7 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size) {
     }
 }
 
-void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len) {
+void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len, t_list *current) {
     if (max_d_len > max_size) {
         for (int i = 0; i < size; i++) {
             mx_replace_carriages(dirents[i]->d_name, '?');
@@ -68,8 +70,8 @@ void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len) 
         }
     }
     else {
-        true_mul(max_size, max_d_len, dirents, (int)size);
-        mx_newline();
+        true_mul(max_size, max_d_len, dirents, (int)size, current);
+        if (current->next != NULL) mx_newline();
     }
 }
 
@@ -92,11 +94,9 @@ int max_d_namlen(t_dirent **dirents, size_t size) {
     return max_len;
 }
 
-void mx_print_table(t_dirent **dirents, size_t size, t_list *current_folder) {
+void mx_print_table(t_dirent **dirents, size_t size, t_list *current) {
     int max_size = mx_get_winsize().ws_col;
     int max_d_len = max_d_namlen(dirents, size);
 
-    multi_clm_print(dirents, (int)size, max_size, max_d_len);
-
-    if (current_folder->next != NULL) mx_newline();
+    multi_clm_print(dirents, (int)size, max_size, max_d_len, current);
 }

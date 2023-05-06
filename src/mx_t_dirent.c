@@ -93,6 +93,8 @@ void mx_dirents_print_table(t_list *dirents, t_list *current_folder) {
 
     mx_print_table(parsed, parsed_len, current_folder);
 
+    if (current_folder->next != NULL) mx_newline();
+
     for (size_t i = 0; i < parsed_len; i++) {
         free(parsed[i]);
     }
@@ -150,7 +152,7 @@ void mx_dirents_print_folders(t_list *dirent_structures, int argc) {
 
         if (mx_doesnt_have_permissions(folder_info)) {
             mx_dirent_info_free(folder_info);
-            
+
             if (argc > 2) { 
                 mx_printstr(folder->d_name);
                 mx_printstr(":\n");
