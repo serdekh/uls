@@ -4,10 +4,10 @@
 void add_tabs(int max_size, int size) {
     if ((max_size - size) % 8 == 0) mx_printchar('\t');
 
-    while ((max_size - size) > 8) {
-        mx_printchar('\t');
-        size += 8 - (size % 8);
-    }
+    // while ((max_size - size) > 8) {
+    //     mx_printchar('\t');
+    //     size += 8 - (size % 8);
+    // }
 }
 
 void mx_replace_carriages(char *str, char with) {
