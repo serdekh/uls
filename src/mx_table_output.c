@@ -31,7 +31,8 @@ void true_mul(int max_size, int max_d_len, t_dirent **dirents, int size, t_list 
             if (i != size - 1) mx_printstr("  ");
         }
 
-        if (current->next == NULL) mx_newline();
+        if (current->next == NULL){}
+        mx_newline();
 
         return;
     }
@@ -71,7 +72,7 @@ void multi_clm_print(t_dirent **dirents, int size, int max_size, int max_d_len, 
     }
     else {
         true_mul(max_size, max_d_len, dirents, (int)size, current);
-        if (current->next != NULL) mx_newline();
+        mx_newline();
     }
 }
 
