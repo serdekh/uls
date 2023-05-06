@@ -144,9 +144,10 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *all) {
     int dirents_size = mx_list_size(all);
 
     for (t_list *i = dirent_structures; i != NULL; i = i->next) {
+        t_list *dirents_in_folder = NULL;
         t_dirent *folder = (t_dirent *)(i->data);
-
         t_dirent_info *folder_info = mx_dirent_info_new();
+
         mx_dirent_info_fill(folder->d_name, folder_info);
 
         if (mx_doesnt_have_permissions(folder_info)) {
@@ -156,40 +157,34 @@ void mx_dirents_print_folders(t_list *dirent_structures, t_list *all) {
             mx_set_error_and_print(EACCES, folder->d_name, false, true);
 
             if (i->next != NULL) mx_newline();
+
             continue;
         }
 
         mx_dirent_info_free(folder_info);
 
-        if (folder->d_type != DT_DIR) continue;
+        dirents_in_folder = mx_dirents_get(folder->d_name);
 
         if (dirents_size > 1) {
             mx_printstr(folder->d_name);
             mx_printstr(":\n");
         }
 
-        t_list *dirents_in_folder = mx_dirents_get(folder->d_name);
-
-        if (!dirents_in_folder && i->next != NULL) {
-            mx_newline();
+        if (!dirents_in_folder) {
+            if (i->next != NULL) mx_newline();
             continue;
         }
 
         mx_dirents_sort(dirents_in_folder);
 
-        if (isatty(STDOUT_FILENO)) {
-            mx_dirents_print_table(dirents_in_folder);
-        }
-        else {
-            mx_foreach_t_dirent(dirents_in_folder, mx_t_dirent_print_name_newline);
-        }
+        isatty(STDOUT_FILENO)
+            ? mx_dirents_print_table(dirents_in_folder)
+            : mx_foreach_t_dirent(dirents_in_folder, mx_t_dirent_print_name_newline);
+        
         mx_dirents_free(dirents_in_folder);
 
-        if (i->next != NULL) {
-            mx_newline();
-        }
+        if (i->next != NULL) mx_newline();
     }
-
 
     if (isatty(1)) mx_newline();
 }
