@@ -74,13 +74,13 @@ void mx_set_permissions_string(t_dirent_info *info, mode_t file_mode) {
 
     #ifdef __APPLE__
     char buf[10000];
-    bool has_xattr = listxattr(path_to_file, buf, 10000, XATTR_NOFOLLOW) > 0;
+    bool has_xattr = listxattr(info->file_name, buf, 10000, XATTR_NOFOLLOW) > 0;
     #endif /* __APPLE__ */
     #ifdef __linux__
         bool has_xattr = listxattr(info->file_name, NULL, 1000) > 0;
     #endif /* __linux__ */
     #ifdef __APPLE__
-        bool has_acl = acl_get_link_np(path_to_file, ACL_TYPE_EXTENDED);
+        bool has_acl = acl_get_link_np(info->file_name, ACL_TYPE_EXTENDED);
     #endif /* __APPLE__ */
     if (has_xattr) {
         info->permissions_string[10] = '@';
