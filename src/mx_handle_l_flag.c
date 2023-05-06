@@ -87,9 +87,10 @@ void mx_handle_l_flag(t_list *dirents) {
         if (!folder_dirents_info && files) mx_printchar('\n');
 
         if (list_size != 1) {
-            if (mx_strcmp(temp->d_name, ((t_dirent *)folders->data)->d_name) != 0) {
-                mx_printchar('\n');
-            }
+            // if (mx_strcmp(temp->d_name, ((t_dirent *)folders->data)->d_name) != 0) {
+            //     mx_printchar('\n');
+            // }
+
             mx_printstr(temp->d_name);
             mx_printstr(":\n");   
         }
@@ -97,6 +98,8 @@ void mx_handle_l_flag(t_list *dirents) {
         mx_dirent_infos_print_from_folder(folder_dirents_info);
         mx_dirents_free(folder_dirents);
         mx_dirent_infos_free(folder_dirents_info);
+
+        if (i->next != NULL) mx_newline();
     }
 
     mx_dirents_free(folders);
