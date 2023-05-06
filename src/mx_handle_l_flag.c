@@ -12,7 +12,7 @@ void mx_check_l_flag(int argc, char **argv) {
     exit(EXIT_SUCCESS);
 }
 
-void mx_handle_l_flag(t_list *dirents) {
+void mx_handle_l_flag(t_list *dirents, int argc) {
     if (!dirents) return;
 
     t_list *files   = NULL;
@@ -55,13 +55,18 @@ void mx_handle_l_flag(t_list *dirents) {
         mx_dirent_info_fill(temp->d_name, folder_info);
 
         if (mx_doesnt_have_permissions(folder_info)) {
-            if (i != folders) mx_newline();
             mx_dirent_info_free(folder_info);
-            mx_printstr(temp->d_name);
-            mx_printstr(":\n");
- 
-            if (i->next != NULL) mx_set_error_and_print(EACCES, temp->d_name, false, true);
-            else mx_set_error_and_print(EACCES, temp->d_name, false, false);
+            
+            if (argc >= 2) { 
+                mx_printstr(temp->d_name);
+                mx_printstr(":\n");
+            }
+
+            mx_set_error_and_print(EACCES, temp->d_name, false, true);
+
+           // else mx_set_error_and_print(EACCES, temp->d_name, false, false);
+           
+            if (i->next != NULL) mx_newline();
             continue;
         }
 

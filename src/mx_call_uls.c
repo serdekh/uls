@@ -73,5 +73,5 @@ void mx_call_uls_with_params(int argc, char **argv) {
     }
 
     mx_dirents_sort(main_input_dirents);
-    mx_handle_l_flag(main_input_dirents);
+    mx_handle_l_flag(main_input_dirents, argc);
 }

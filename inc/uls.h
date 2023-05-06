@@ -92,7 +92,7 @@ t_dirent_info *mx_dirent_info_new();
 
 void mx_check_l_flag(int argc, char **argv);
 void mx_try_opendir(DIR **dir, const char *name, bool exit_program);
-void mx_handle_l_flag(t_list *dirent_structures);
+void mx_handle_l_flag(t_list *dirent_structures, int argc);
 
 void mx_print_total(t_list *detailed_infos);
 
