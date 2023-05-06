@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <sys/ioctl.h>
 
 #include "../inc/libmx/inc/libmx.h"
