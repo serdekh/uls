@@ -65,7 +65,7 @@ void mx_dirents_sort(t_list *dirent_structures);
 void mx_dirents_print_from_folder(t_dirent *folder); 
 void mx_dirents_free(t_list *dirent_structures_list); 
 void mx_dirents_print_both(t_list *dirent_structures); 
-void mx_dirents_print_folders(t_list *dirent_structures, t_list *all);
+void mx_dirents_print_folders(t_list *dirent_structures, int argc);
 
 void mx_dirent_info_free(t_dirent_info *info); 
 void mx_dirent_info_fill(char *filename, t_dirent_info *info); 
