@@ -184,8 +184,13 @@ void mx_dirents_print_folders(t_list *dirent_structures, int argc) {
         if (isatty(STDOUT_FILENO)) {
             mx_dirents_print_table(dirents_in_folder, i);
         }
-        else mx_foreach_t_dirent(dirents_in_folder, mx_t_dirent_print_name_newline);
-        
+        else {
+            for (t_list *j = dirents_in_folder; j != NULL; j = j->next) {
+                t_dirent *temp = (t_dirent *)(j->data);
+                mx_printstrc(temp->d_name, '\n');
+                if (j->next == NULL && i->next != NULL) mx_newline();
+            }
+        }
         mx_dirents_free(dirents_in_folder);
     }
 }
